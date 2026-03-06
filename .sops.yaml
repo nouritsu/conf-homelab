@@ -1,0 +1,14 @@
+keys:
+  - &homelab age1hug5f8wz0tr0ym9q8g7kzt5wce0krnfv25u8n3fvsvj9gy0lafss7e8u8r
+  - &pc age1wygzuq7267u5mmrlc482fsfrdfd77jc0y3gs53v0jz04069gmesqq6waee
+creation_rules:
+  - path_regex: modules/secrets/secrets.yaml$
+    key_groups:
+      - age:
+          - *homelab
+          - *pc
+  - path_regex: modules/secrets/cert.p12.enc$
+    key_groups:
+      - age:
+          - *homelab
+          - *pc
