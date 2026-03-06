@@ -1,5 +1,0 @@
-{
-  imports = [
-    ./gluetun.nix
-  ];
-}

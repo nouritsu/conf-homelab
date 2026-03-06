@@ -25,9 +25,8 @@
     ./vault # vaultwarden
     ./vpn
 
-    ./-endpoints
-    ./-containers
-    ./-vpn
+    ./caddy.nix
     ./rathole.nix
+    ./gluetun.nix
   ];
 }

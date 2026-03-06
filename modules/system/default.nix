@@ -38,7 +38,6 @@
     sound/sound.nix
 
     # storage
-    storage/nvme.nix
     storage/xfs.nix
     storage/hdd.nix
     storage/usb-ssd.nix
