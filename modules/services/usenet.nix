@@ -2,7 +2,11 @@
   flake.nixosModules.srv-sabnzbd = {config, ...}: let
     endpoint = config.my.endpoints.usenet;
   in {
-    my.endpoints.usenet.port = 8083;
+    my.endpoints.usenet = {
+      enable = true;
+      port = 8083;
+      subdomain = "usenet";
+    };
     my.containers.sabnzbd = {
       enable = true;
       vpn = true;

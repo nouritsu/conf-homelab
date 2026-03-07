@@ -2,7 +2,11 @@
   flake.nixosModules.srv-qbittorrent = {config, ...}: let
     endpoint = config.my.endpoints.torrent;
   in {
-    my.endpoints.torrent.port = 8082;
+    my.endpoints.torrent = {
+      enable = true;
+      port = 8082;
+      subdomain = "torrent";
+    };
     my.containers.qbittorrent = {
       enable = true;
       vpn = true;

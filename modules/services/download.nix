@@ -5,10 +5,12 @@
     in {
       imports = [self.nixosModules.aria2-secrets];
       my.endpoints.download = {
+        enable = true;
         port = 6880;
         subdomain = "download";
       };
       my.endpoints.aria2 = {
+        enable = true;
         port = 6800;
         subdomain = "aria2";
       };

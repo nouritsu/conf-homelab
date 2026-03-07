@@ -3,6 +3,7 @@
     endpoint = config.my.endpoints.roundcube;
   in {
     my.endpoints.roundcube = {
+      enable = true;
       port = 8001;
       subdomain = "mail";
     };

@@ -3,6 +3,7 @@
     endpoint = config.my.endpoints.prowlarr;
   in {
     my.endpoints.prowlarr = {
+      enable = true;
       port = 8084;
       subdomain = "indexes";
     };

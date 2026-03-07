@@ -1,5 +1,5 @@
 {
-  flake.nixosModules.opts = {
+  flake.nixosModules.opts-containers = {
     config,
     lib,
     ...

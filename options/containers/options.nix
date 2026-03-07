@@ -1,5 +1,5 @@
 {
-  flake.nixosModules.opts = {lib, ...}: let
+  flake.nixosModules.opts-containers = {lib, ...}: let
     inherit (lib) mkOption mkEnableOption types;
 
     containerOpts = {

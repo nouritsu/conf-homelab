@@ -3,6 +3,7 @@
     endpoint = config.my.endpoints.radarr;
   in {
     my.endpoints.radarr = {
+      enable = true;
       port = 8085;
       subdomain = "movies";
     };

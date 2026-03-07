@@ -3,6 +3,7 @@
     endpoint = config.my.endpoints.bookshelf;
   in {
     my.endpoints.bookshelf = {
+      enable = true;
       port = 8787;
       subdomain = "books";
     };

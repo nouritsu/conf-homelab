@@ -3,6 +3,7 @@
     endpoint = config.my.endpoints.myspeed;
   in {
     my.endpoints.myspeed = {
+      enable = true;
       port = 5216;
       subdomain = "speed";
     };

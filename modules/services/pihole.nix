@@ -6,7 +6,11 @@
   }: let
     TWELVE_HOURS_SECONDS = 43200;
   in {
-    my.endpoints.pihole.port = 8081;
+    my.endpoints.pihole = {
+      enable = true;
+      port = 8081;
+      subdomain = "pihole";
+    };
     environment.systemPackages = [pkgs.pihole-ftl];
     networking = {
       useDHCP = false;

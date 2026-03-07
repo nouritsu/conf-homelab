@@ -13,7 +13,8 @@
         homelab-system
         homelab-disko
         secrets
-        opts
+        opts-endpoints
+        opts-containers
 
         # system
         graphics
@@ -89,6 +90,7 @@
         ];
 
       networking.hostName = "homelab";
+      networking.domain = "nouritsu.com";
 
       boot.loader.raspberryPi.bootloader = "kernel";
       environment.systemPackages = [pkgs.raspberrypi-eeprom];

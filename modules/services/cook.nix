@@ -3,6 +3,7 @@
     endpoint = config.my.endpoints.cook-cli;
   in {
     my.endpoints.cook-cli = {
+      enable = true;
       port = 9080;
       subdomain = "cook";
     };

@@ -3,6 +3,7 @@
     endpoint = config.my.endpoints.home-assistant;
   in {
     my.endpoints.home-assistant = {
+      enable = true;
       port = 8123;
       subdomain = "home";
     };

@@ -3,6 +3,7 @@
     endpoint = config.my.endpoints.jellyfin;
   in {
     my.endpoints.jellyfin = {
+      enable = true;
       port = 8096;
       subdomain = "player";
     };

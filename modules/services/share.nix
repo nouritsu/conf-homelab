@@ -1,16 +1,22 @@
 {self, ...}: {
   flake.nixosModules = {
     srv-enclosed = {config, ...}: let
-      port = "8788";
+      endpoint = config.my.endpoints.enclosed;
     in {
       imports = [self.nixosModules.enclosed-secrets];
+      my.endpoints.enclosed = {
+        enable = true;
+        tunnel = true;
+        port = 8788;
+        subdomain = "share";
+      };
       my.containers.enclosed = {
         enable = true;
         image = {
           provider = "official";
           owner = "corentinth";
         };
-        ports = ["${port}:8787"];
+        ports = ["${toString endpoint.port}:8787"];
         env.PUBLIC_IS_AUTHENTICATION_REQUIRED = "true";
         envFile = [config.sops.templates."enclosed.env".path];
         vols = ["/data/enclosed:/app/.data"];

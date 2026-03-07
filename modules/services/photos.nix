@@ -8,6 +8,7 @@
         self.nixosModules.immich-db
       ];
       my.endpoints.immich = {
+        enable = true;
         port = 2283;
         subdomain = "photos";
       };

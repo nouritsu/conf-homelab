@@ -1,49 +1,56 @@
 {
-  flake.nixosModules.opts = {lib, ...}: let
-    endpointOpts = {
+  flake.nixosModules.opts-endpoints = {
+    lib,
+    config,
+    ...
+  }: let
+    inherit (lib) mkOption mkEnableOption types;
+    top-config = config;
+
+    opts = {
       name,
       config,
       ...
     }: {
       options = {
-        enable = lib.mkEnableOption "endpoint ${name}" // {default = true;};
+        enable = mkEnableOption "endpoint ${name}";
 
-        subdomain = lib.mkOption {
-          type = lib.types.str;
-          default = name;
-          description = "Subdomain for this endpoint";
-        };
+        tunnel = mkEnableOption "${name} as rathole service";
 
-        port = lib.mkOption {
-          type = lib.types.port;
-          description = "Port to reverse proxy to";
-        };
-
-        domain = lib.mkOption {
-          type = lib.types.str;
+        domain = mkOption {
+          type = types.str;
           readOnly = true;
-          default = "${config.subdomain}.${config.baseDomain}";
+          default =
+            if config.subdomain != ""
+            then "${config.subdomain}.${top-config.networking.domain}"
+            else top-config.networking.domain;
           description = "Full domain (computed)";
         };
 
-        baseDomain = lib.mkOption {
-          type = lib.types.str;
-          default = "nouritsu.com";
-          description = "Base domain to append to subdomain";
+        subdomain = mkOption {
+          type = types.str;
+          default = "";
+          description = "Subdomain for this endpoint";
         };
 
-        extraCaddyConfig = lib.mkOption {
-          type = lib.types.lines;
+        port = mkOption {
+          type = types.nullOr types.port;
+          default = null;
+          description = "Port to reverse proxy to";
+        };
+
+        extraConfig = mkOption {
+          type = types.str;
           default = "";
-          description = "Additional Caddy configuration";
+          description = "Caddy extraConfig";
         };
       };
     };
   in {
-    options.my.endpoints = lib.mkOption {
-      type = lib.types.attrsOf (lib.types.submodule endpointOpts);
+    options.my.endpoints = mkOption {
+      type = types.attrsOf (types.submodule opts);
       default = {};
-      description = "Endpoint definitions for reverse proxy and DNS";
+      description = "Endpoint definitions for caddy";
     };
   };
 }

@@ -3,6 +3,7 @@
     endpoint = config.my.endpoints.sonarr;
   in {
     my.endpoints.sonarr = {
+      enable = true;
       port = 8086;
       subdomain = "shows";
     };

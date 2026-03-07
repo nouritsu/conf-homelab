@@ -6,6 +6,7 @@
     hdd-2tb = "/dev/sdb";
   in {
     my.endpoints.scrutiny = {
+      enable = true;
       port = 8180;
       subdomain = "disks";
     };

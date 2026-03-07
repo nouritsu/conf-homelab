@@ -1,6 +1,7 @@
 {self, ...}: {
   flake.nixosModules = {
     srv-documenso = {config, ...}: let
+      endpoint = config.my.endpoints.documenso;
       smtp-host = "smtp.hostinger.com";
       smtp-port = 465;
     in {
@@ -8,6 +9,12 @@
         self.nixosModules.documenso-secrets
         self.nixosModules.documenso-db
       ];
+      my.endpoints.documenso = {
+        enable = true;
+        tunnel = true;
+        port = 3000;
+        subdomain = "sign";
+      };
       my.containers.documenso = {
         enable = true;
         image.provider = "official";

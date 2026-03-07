@@ -3,6 +3,7 @@
     endpoint = config.my.endpoints.syncthing;
   in {
     my.endpoints.syncthing = {
+      enable = true;
       port = 8384;
       subdomain = "sync";
     };

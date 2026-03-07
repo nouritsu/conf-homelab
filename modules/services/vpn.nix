@@ -7,6 +7,7 @@
     in {
       imports = [self.nixosModules.wg-easy-secrets];
       my.endpoints.wg-easy = {
+        enable = true;
         port = 51821;
         subdomain = "vpn";
       };
