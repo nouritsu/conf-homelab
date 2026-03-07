@@ -1,9 +1,5 @@
 {
-  flake.nixosModules.opts-endpoints = {
-    config,
-    lib,
-    ...
-  }: let
+  flake.nixosModules.opts = {lib, ...}: let
     endpointOpts = {
       name,
       config,

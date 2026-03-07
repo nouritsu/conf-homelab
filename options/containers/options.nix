@@ -1,10 +1,5 @@
 {
-  flake.nixosModules.opts-containers = {
-    config,
-    lib,
-    pkgs,
-    ...
-  }: let
+  flake.nixosModules.opts = {lib, ...}: let
     inherit (lib) mkOption mkEnableOption types;
 
     containerOpts = {
@@ -97,7 +92,9 @@
                 official = "${imageCfg.owner}/${imageCfg.name}:${imageCfg.tag}";
                 other = "";
               }
-              .${imageCfg.provider};
+              .${
+                imageCfg.provider
+              };
             description = "Full image url, only manually set if provider not set.";
           };
         };
@@ -126,7 +123,9 @@
                 ghcr = "ghcr.io/themepark-dev/theme.park:${themeCfg.name}";
                 other = "";
               }
-              .${themeCfg.provider};
+              .${
+                themeCfg.provider
+              };
             description = "Full theme url, only manually set if provider not set";
           };
 

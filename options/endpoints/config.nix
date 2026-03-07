@@ -1,5 +1,5 @@
 {
-  flake.nixosModules.opts-endpoints = {
+  flake.nixosModules.opts = {
     config,
     lib,
     ...
@@ -10,7 +10,7 @@
     config = lib.mkIf (enabledEndpoints != {}) {
       services.pihole-ftl.settings.dns.hosts =
         lib.mapAttrsToList
-        (name: ep: "${config.my.net.ip}   ${ep.domain}")
+        (name: ep: "192.168.178.128   ${ep.domain}")
         enabledEndpoints;
 
       services.caddy.virtualHosts =

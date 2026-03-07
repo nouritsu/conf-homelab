@@ -18,7 +18,7 @@
       defaultSopsFormat = "yaml";
     };
 
-    sops.age.keyFile = "/home/${config.my.user.alias}/.config/sops/age/keys.txt";
+    sops.age.keyFile = "/home/aneesh/.config/sops/age/keys.txt";
 
     sops.secrets."documenso-cert" = {
       sopsFile = ./cert.p12.enc;

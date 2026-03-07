@@ -19,7 +19,7 @@
         env = {
           INIT_ENABLED = "true";
           INIT_USERNAME = "admin";
-          INIT_DNS = "${config.my.net.ip},1.1.1.1";
+          INIT_DNS = "192.168.178.128,1.1.1.1";
           WG_POST_UP = "";
           WG_POST_DOWN = "";
         };

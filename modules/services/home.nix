@@ -6,6 +6,7 @@
       port = 8123;
       subdomain = "home";
     };
+
     my.containers.home-assistant = {
       enable = true;
       image = {
