@@ -86,12 +86,7 @@
                 token = "${config.sops.placeholder."rathole-token"}"
               '';
           in
-            ''
-              [${config.services.rathole.role}]
-              remote_addr = "${config.sops.placeholder."rathole-remote-addr"}"
-            ''
-            + "\n"
-            + lib.concatStringsSep "\n" (lib.mapAttrsToList to_rathole_credential tunneled);
+            lib.concatStringsSep "\n" (lib.mapAttrsToList to_rathole_credential tunneled);
         })
     ];
   };

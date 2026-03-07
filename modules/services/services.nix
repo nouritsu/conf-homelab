@@ -41,13 +41,21 @@
       };
     };
 
-    rathole = {config, ...}: {
+    rathole = {
+      config,
+      lib,
+      ...
+    }: {
       imports = [self.nixosModules.rathole-secrets];
       services.rathole = {
         enable = true;
         role = "client";
         credentialsFile = config.sops.templates."rathole-credentials.toml".path;
       };
+      sops.templates."rathole-credentials.toml".content = lib.mkBefore ''
+        [client]
+        remote_addr = "${config.sops.placeholder."rathole-remote-addr"}"
+      '';
     };
 
     rathole-secrets = {...}: {
