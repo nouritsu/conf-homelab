@@ -24,6 +24,7 @@
       imports = [
         (import-tree ./options)
         (import-tree ./hosts)
+        (import-tree ./modules)
         ./shell.nix
       ];
     };
