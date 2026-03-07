@@ -6,6 +6,7 @@
       imports = [self.nixosModules.paperless-secrets];
       my.endpoints.paperless = {
         enable = true;
+        tlsInternal = true;
         port = 28981;
         subdomain = "docs";
       };

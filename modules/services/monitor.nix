@@ -2,6 +2,7 @@
   flake.nixosModules.srv-uptime-kuma = {...}: {
     my.endpoints.uptime-kuma = {
       enable = true;
+      tlsInternal = true;
       port = 4000;
       subdomain = "monitor";
     };

@@ -4,6 +4,7 @@
   in {
     my.endpoints.sonarr = {
       enable = true;
+      tlsInternal = true;
       port = 8086;
       subdomain = "shows";
     };

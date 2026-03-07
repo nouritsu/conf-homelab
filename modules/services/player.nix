@@ -4,6 +4,7 @@
   in {
     my.endpoints.jellyfin = {
       enable = true;
+      tlsInternal = true;
       port = 8096;
       subdomain = "player";
     };

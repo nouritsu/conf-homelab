@@ -9,6 +9,7 @@
       ];
       my.endpoints.immich = {
         enable = true;
+        tlsInternal = true;
         port = 2283;
         subdomain = "photos";
       };

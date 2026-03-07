@@ -4,6 +4,7 @@
   in {
     my.endpoints.home-assistant = {
       enable = true;
+      tlsInternal = true;
       port = 8123;
       subdomain = "home";
     };

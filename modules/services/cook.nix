@@ -4,6 +4,7 @@
   in {
     my.endpoints.cook-cli = {
       enable = true;
+      tlsInternal = true;
       port = 9080;
       subdomain = "cook";
     };

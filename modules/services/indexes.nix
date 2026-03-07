@@ -4,6 +4,7 @@
   in {
     my.endpoints.prowlarr = {
       enable = true;
+      tlsInternal = true;
       port = 8084;
       subdomain = "indexes";
     };

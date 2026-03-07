@@ -4,6 +4,7 @@
   in {
     my.endpoints.roundcube = {
       enable = true;
+      tlsInternal = true;
       port = 8001;
       subdomain = "mail";
     };

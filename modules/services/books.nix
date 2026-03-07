@@ -4,6 +4,7 @@
   in {
     my.endpoints.bookshelf = {
       enable = true;
+      tlsInternal = true;
       port = 8787;
       subdomain = "books";
     };

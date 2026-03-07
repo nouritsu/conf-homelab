@@ -41,11 +41,11 @@
                 extraConfig =
                   if ep.port == null
                   then ''
-                    ${if !ep.tunnel then "tls internal" else ""}
+                    ${if ep.tlsInternal then "tls internal" else ""}
                     ${ep.extraConfig}
                   ''
                   else ''
-                    ${if !ep.tunnel then "tls internal" else ""}
+                    ${if ep.tlsInternal then "tls internal" else ""}
                     reverse_proxy localhost:${toString ep.port}
                     ${ep.extraConfig}
                   '';

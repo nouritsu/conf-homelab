@@ -4,6 +4,7 @@
   in {
     my.endpoints.usenet = {
       enable = true;
+      tlsInternal = true;
       port = 8083;
       subdomain = "usenet";
     };

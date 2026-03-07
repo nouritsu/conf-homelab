@@ -4,6 +4,7 @@
   in {
     my.endpoints.myspeed = {
       enable = true;
+      tlsInternal = true;
       port = 5216;
       subdomain = "speed";
     };

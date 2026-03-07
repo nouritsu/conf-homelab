@@ -4,6 +4,7 @@
   in {
     my.endpoints.syncthing = {
       enable = true;
+      tlsInternal = true;
       port = 8384;
       subdomain = "sync";
     };

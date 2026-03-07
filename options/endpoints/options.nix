@@ -17,6 +17,8 @@
 
         tunnel = mkEnableOption "${name} as rathole service";
 
+        tlsInternal = mkEnableOption "internal TLS for caddy";
+
         domain = mkOption {
           type = types.str;
           readOnly = true;

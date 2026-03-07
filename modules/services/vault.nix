@@ -6,6 +6,7 @@
       imports = [self.nixosModules.vaultwarden-secrets];
       my.endpoints.vaultwarden = {
         enable = true;
+        tlsInternal = true;
         port = 8087;
         subdomain = "vault";
       };

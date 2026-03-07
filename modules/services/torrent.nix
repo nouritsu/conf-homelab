@@ -4,6 +4,7 @@
   in {
     my.endpoints.torrent = {
       enable = true;
+      tlsInternal = true;
       port = 8082;
       subdomain = "torrent";
     };

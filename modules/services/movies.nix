@@ -4,6 +4,7 @@
   in {
     my.endpoints.radarr = {
       enable = true;
+      tlsInternal = true;
       port = 8085;
       subdomain = "movies";
     };

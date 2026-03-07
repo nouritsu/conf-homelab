@@ -7,6 +7,7 @@
   in {
     my.endpoints.scrutiny = {
       enable = true;
+      tlsInternal = true;
       port = 8180;
       subdomain = "disks";
     };

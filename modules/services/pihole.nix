@@ -8,6 +8,7 @@
   in {
     my.endpoints.pihole = {
       enable = true;
+      tlsInternal = true;
       port = 8081;
       subdomain = "pihole";
     };
