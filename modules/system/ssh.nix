@@ -19,8 +19,7 @@
       ];
 
       users.users.root.openssh.authorizedKeys.keys = [
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAwVvRZ6cNb1mSXehYaqGtX5EkdSb9IqKzdsXPepddhY aneesh@pc"
-        # "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICaUPFDTKQTSGFOTAzOtkGfLY93kUimERX1TcVi+WIiU aneesh@pc-enc"
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICaUPFDTKQTSGFOTAzOtkGfLY93kUimERX1TcVi+WIiU aneesh@pc-enc"
       ];
     };
 

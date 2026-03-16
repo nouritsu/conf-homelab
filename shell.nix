@@ -2,7 +2,7 @@
   perSystem = {pkgs, ...}: {
     devShells.default = pkgs.mkShell {
       packages = let
-        sync = pkgs.writeShellScriptBin "sync" ''
+        s = pkgs.writeShellScriptBin "s" ''
           ${pkgs.rsync}/bin/rsync -avz --delete \
             --exclude '.git' \
             --exclude 'result' \
@@ -10,7 +10,7 @@
           exec ssh aneesh@homelab
         '';
       in [
-        sync
+        s
       ];
     };
   };

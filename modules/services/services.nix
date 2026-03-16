@@ -3,6 +3,10 @@
     caddy = {...}: {
       services.caddy.enable = true;
       networking.firewall.allowedTCPPorts = [80 443];
+
+      security.pki.certificateFiles = [
+        ../../assets/caddy.crt
+      ];
     };
 
     gluetun = {config, ...}: {

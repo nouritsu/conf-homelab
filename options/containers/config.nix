@@ -80,10 +80,6 @@
           message = "my.containers: duplicate host ports among non-VPN containers";
         }
         {
-          assertion = !has-duplicates (lib.concatMap (c: map get-container-port c.ports) (lib.attrValues direct-containers));
-          message = "my.containers: duplicate container ports among non-VPN containers";
-        }
-        {
           assertion = !has-duplicates (lib.concatMap (c: map get-host-port c.ports) (lib.attrValues vpn-containers));
           message = "my.containers: duplicate host ports among VPN containers (exposed via gluetun)";
         }
