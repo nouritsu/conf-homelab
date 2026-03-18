@@ -2,6 +2,7 @@
   flake.nixosModules.opts-containers = {
     config,
     lib,
+    pkgs,
     ...
   }: let
     cfg = config.my.containers;
@@ -9,6 +10,8 @@
     enabled-containers = lib.filterAttrs (_: c: c.enable) cfg;
     vpn-containers = lib.filterAttrs (_: c: c.vpn) enabled-containers;
     direct-containers = lib.filterAttrs (_: c: !c.vpn) enabled-containers;
+    restart-containers = lib.filterAttrs (_: c: c.restart.enable) enabled-containers;
+    backend = config.virtualisation.oci-containers.backend;
 
     get-host-port = mapping: let
       parts = lib.splitString ":" mapping;
@@ -88,6 +91,27 @@
           message = "my.containers: duplicate container ports among VPN containers (exposed via gluetun)";
         }
       ];
+
+      systemd.services = lib.mapAttrs' (name: _:
+        lib.nameValuePair "restart-container-${name}" {
+          description = "Scheduled restart of ${name} container";
+          serviceConfig = {
+            Type = "oneshot";
+            ExecStart = "${pkgs.systemd}/bin/systemctl restart ${backend}-${name}.service";
+          };
+        }
+      ) restart-containers;
+
+      systemd.timers = lib.mapAttrs' (name: container:
+        lib.nameValuePair "restart-container-${name}" {
+          wantedBy = ["timers.target"];
+          description = "Daily restart timer for ${name} container";
+          timerConfig = {
+            OnCalendar = container.restart.schedule;
+            Persistent = true;
+          };
+        }
+      ) restart-containers;
 
       virtualisation.oci-containers.containers = lib.mkMerge [
         (lib.mapAttrs mk-container enabled-containers)

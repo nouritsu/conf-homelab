@@ -14,6 +14,7 @@
       };
       my.containers.wg-easy = {
         enable = true;
+        restart.enable = false; # vpn
         image = {
           tag = "15";
           provider = "ghcr";

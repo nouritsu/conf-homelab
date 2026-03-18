@@ -42,6 +42,7 @@
       app-core
       app-fish
       app-nh
+      app-kodi
 
       # infrastructure
       caddy
@@ -53,7 +54,7 @@
       srv-openrgb
       srv-beszel
       srv-copyparty
-      srv-grocy
+      srv-donetick
       srv-bookshelf
       srv-bazarr
       srv-cook-cli
@@ -63,11 +64,11 @@
       srv-homeassistant
       srv-prowlarr
       srv-tailscale
-      srv-roundcube
-      srv-jellyseerr
-      srv-uptime-kuma
+      # srv-roundcube
+      # srv-jellyseerr
+      # srv-uptime-kuma
       srv-radarr
-      srv-immich
+      # srv-immich
       srv-pihole
       srv-jellyfin
       srv-enclosed
@@ -78,7 +79,6 @@
       srv-myanonymouse-seedboxapi
       srv-sabnzbd
       srv-vaultwarden
-      # srv-wg-easy
     ];
   };
 

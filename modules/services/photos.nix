@@ -72,6 +72,7 @@
       imports = [self.nixosModules.immich-db-secrets];
       my.containers.immich-db = {
         enable = true;
+        restart.enable = false; # database
         image.url = "ghcr.io/immich-app/postgres:14-vectorchord0.4.3-pgvectors0.2.0";
         env = {
           POSTGRES_USER = "immich";

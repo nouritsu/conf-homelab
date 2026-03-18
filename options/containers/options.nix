@@ -58,6 +58,19 @@
           description = "Extra options";
         };
 
+        restart = {
+          enable = mkOption {
+            type = types.bool;
+            default = true;
+            description = "Enable daily scheduled restart of this container.";
+          };
+          schedule = mkOption {
+            type = types.str;
+            default = "*-*-* 05:30:00";
+            description = "Systemd OnCalendar expression for the restart schedule.";
+          };
+        };
+
         image = {
           provider = mkOption {
             type = types.enum ["lscr" "ghcr" "official" "other"];

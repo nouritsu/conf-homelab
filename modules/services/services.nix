@@ -13,6 +13,7 @@
       imports = [self.nixosModules.gluetun-secrets];
       my.containers.gluetun = {
         enable = true;
+        restart.enable = false; # vpn
         image = {
           owner = "qmcgaw";
           provider = "official";

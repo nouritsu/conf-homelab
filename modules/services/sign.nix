@@ -64,6 +64,7 @@
       imports = [self.nixosModules.documenso-db-secrets];
       my.containers.documenso-db = {
         enable = true;
+        restart.enable = false; # database
         image.url = "postgres:15";
         env = {
           POSTGRES_USER = "documenso";

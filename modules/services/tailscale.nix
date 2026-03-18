@@ -7,6 +7,7 @@
 
       my.containers.tailscale = {
         enable = true;
+        restart.enable = false; # vpn
 
         image = {
           provider = "ghcr";
