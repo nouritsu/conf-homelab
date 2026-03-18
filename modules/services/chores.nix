@@ -36,14 +36,14 @@
     donetick-secrets = {config, ...}: let
       endpoint = config.my.endpoints.donetick;
     in {
-      sops.secrets."donetick-jwt-secret" = {};
+      sops.secrets."donetick/jwt-secret" = {};
 
       sops.templates."donetick-config.yaml" = {
         owner = "root";
         content = builtins.toJSON {
           name = "homelab";
 
-          jwt.secret = config.sops.placeholder."donetick-jwt-secret";
+          jwt.secret = config.sops.placeholder."donetick/jwt-secret";
 
           database = {
             type = "sqlite";

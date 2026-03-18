@@ -57,7 +57,7 @@
     immich-secrets = {config, ...}: {
       sops.templates."immich.env" = {
         content = ''
-          DB_PASSWORD=${config.sops.placeholder."postgres-password"}
+          DB_PASSWORD=${config.sops.placeholder."photos/postgres-password"}
           DB_HOSTNAME=immich-db
           DB_PORT=5434
           DB_USERNAME=immich
@@ -94,10 +94,10 @@
     };
 
     immich-db-secrets = {config, ...}: {
-      sops.secrets."postgres-password" = {};
+      sops.secrets."photos/postgres-password" = {};
       sops.templates."immich-postgres.env" = {
         content = ''
-          POSTGRES_PASSWORD=${config.sops.placeholder."postgres-password"}
+          POSTGRES_PASSWORD=${config.sops.placeholder."photos/postgres-password"}
         '';
       };
     };

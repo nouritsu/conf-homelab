@@ -22,8 +22,6 @@
         env = {
           NEXT_PRIVATE_SMTP_HOST = smtp-host;
           NEXT_PRIVATE_SMTP_PORT = toString smtp-port;
-          NEXT_PRIVATE_SMTP_USERNAME = "home@nouritsu.com";
-          NEXT_PRIVATE_SMTP_FROM_ADDRESS = "sign@nouritsu.com";
           NEXT_PRIVATE_SMTP_SECURE = "true";
           PORT = "3000";
           NEXTAUTH_URL = "https://sign.nouritsu.com";
@@ -43,19 +41,24 @@
     };
 
     documenso-secrets = {config, ...}: {
-      sops.secrets."nextauth-secret" = {};
-      sops.secrets."next-key" = {};
-      sops.secrets."next-secondary-key" = {};
-      sops.secrets."next-signing-pass" = {};
+      sops.secrets."sign/nextauth-secret" = {};
+      sops.secrets."sign/next-key" = {};
+      sops.secrets."sign/next-secondary-key" = {};
+      sops.secrets."sign/next-signing-pass" = {};
+      sops.secrets."mail/home-password" = {};
+      sops.secrets."mail/home-mail" = {};
+      sops.secrets."sign/sign-mail" = {};
       sops.templates."documenso.env" = {
         content = ''
-          NEXTAUTH_SECRET=${config.sops.placeholder."nextauth-secret"}
-          NEXT_PRIVATE_ENCRYPTION_KEY=${config.sops.placeholder."next-key"}
-          NEXT_PRIVATE_ENCRYPTION_SECONDARY_KEY=${config.sops.placeholder."next-secondary-key"}
-          NEXT_PRIVATE_SIGNING_PASSPHRASE=${config.sops.placeholder."next-signing-pass"}
-          NEXT_PRIVATE_SMTP_PASSWORD=${config.sops.placeholder."home-mail-password"}
-          NEXT_PRIVATE_DATABASE_URL=postgresql://documenso:${config.sops.placeholder."postgres-password"}@documenso-db:5433/documenso
-          NEXT_PRIVATE_DIRECT_DATABASE_URL=postgresql://documenso:${config.sops.placeholder."postgres-password"}@documenso-db:5433/documenso
+          NEXTAUTH_SECRET=${config.sops.placeholder."sign/nextauth-secret"}
+          NEXT_PRIVATE_ENCRYPTION_KEY=${config.sops.placeholder."sign/next-key"}
+          NEXT_PRIVATE_ENCRYPTION_SECONDARY_KEY=${config.sops.placeholder."sign/next-secondary-key"}
+          NEXT_PRIVATE_SIGNING_PASSPHRASE=${config.sops.placeholder."sign/next-signing-pass"}
+          NEXT_PRIVATE_SMTP_USERNAME=${config.sops.placeholder."mail/home-mail"}
+          NEXT_PRIVATE_SMTP_FROM_ADDRESS=${config.sops.placeholder."sign/sign-mail"}
+          NEXT_PRIVATE_SMTP_PASSWORD=${config.sops.placeholder."mail/home-password"}
+          NEXT_PRIVATE_DATABASE_URL=postgresql://documenso:${config.sops.placeholder."sign/postgres-password"}@documenso-db:5433/documenso
+          NEXT_PRIVATE_DIRECT_DATABASE_URL=postgresql://documenso:${config.sops.placeholder."sign/postgres-password"}@documenso-db:5433/documenso
         '';
       };
     };
@@ -83,10 +86,10 @@
     };
 
     documenso-db-secrets = {config, ...}: {
-      sops.secrets."postgres-password" = {};
+      sops.secrets."sign/postgres-password" = {};
       sops.templates."documenso-postgres.env" = {
         content = ''
-          POSTGRES_PASSWORD=${config.sops.placeholder."postgres-password"}
+          POSTGRES_PASSWORD=${config.sops.placeholder."sign/postgres-password"}
         '';
       };
     };

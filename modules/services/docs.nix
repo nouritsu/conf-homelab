@@ -16,7 +16,7 @@
         consumptionDirIsPublic = true;
         port = endpoint.port;
         domain = endpoint.domain;
-        passwordFile = config.sops.secrets.paperless-admin-password.path;
+        passwordFile = config.sops.secrets."paperless/admin-password".path;
         configureTika = true;
         settings = {
           PAPERLESS_OCR_LANGUAGE = "eng+deu";
@@ -27,7 +27,7 @@
     };
 
     paperless-secrets = {...}: {
-      sops.secrets."paperless-admin-password" = {};
+      sops.secrets."paperless/admin-password" = {};
     };
   };
 }

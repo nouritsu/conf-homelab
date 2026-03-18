@@ -39,7 +39,7 @@
     };
 
     copyparty-secrets = {config, ...}: {
-      sops.secrets."copyparty-aneesh-password" = {};
+      sops.secrets."copyparty/aneesh-password" = {};
 
       sops.templates."copyparty.conf" = {
         content = ''
@@ -54,7 +54,7 @@
           ah-alg: argon2
 
           [accounts]
-          aneesh: ${config.sops.placeholder."copyparty-aneesh-password"}
+          aneesh: ${config.sops.placeholder."copyparty/aneesh-password"}
 
           [/data]
           /data

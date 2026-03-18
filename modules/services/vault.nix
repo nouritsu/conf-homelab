@@ -23,11 +23,11 @@
     };
 
     vaultwarden-secrets = {config, ...}: {
-      sops.secrets."vaultwarden-admin-token" = {};
+      sops.secrets."vaultwarden/admin-token" = {};
       sops.templates."vaultwarden.env" = {
         owner = "vaultwarden";
         content = ''
-          ADMIN_TOKEN=${config.sops.placeholder.vaultwarden-admin-token}
+          ADMIN_TOKEN=${config.sops.placeholder."vaultwarden/admin-token"}
         '';
       };
     };

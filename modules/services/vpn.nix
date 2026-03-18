@@ -57,12 +57,12 @@
     };
 
     wg-easy-secrets = {config, ...}: {
-      sops.secrets."wg-server-public-ip" = {};
-      sops.secrets."wg-easy-password" = {};
+      sops.secrets."wireguard/server-public-ip" = {};
+      sops.secrets."wireguard/easy-password" = {};
       sops.templates."wg-easy.env" = {
         content = ''
-          INIT_HOST=${config.sops.placeholder."wg-server-public-ip"}
-          INIT_PASSWORD=${config.sops.placeholder."wg-easy-password"}
+          INIT_HOST=${config.sops.placeholder."wireguard/server-public-ip"}
+          INIT_PASSWORD=${config.sops.placeholder."wireguard/easy-password"}
         '';
       };
     };

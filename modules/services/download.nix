@@ -52,10 +52,10 @@
     };
 
     aria2-secrets = {config, ...}: {
-      sops.secrets."aria2-rpc" = {};
+      sops.secrets."aria2/rpc" = {};
       sops.templates."aria2.env" = {
         content = ''
-          RPC_SECRET=${config.sops.placeholder."aria2-rpc"}
+          RPC_SECRET=${config.sops.placeholder."aria2/rpc"}
         '';
       };
     };

@@ -83,7 +83,7 @@
               */
               ''
                 [${config.services.rathole.role}.services.${srv_name ep}]
-                token = "${config.sops.placeholder."rathole-token"}"
+                token = "${config.sops.placeholder."rathole/token"}"
               '';
           in
             lib.concatStringsSep "\n" (lib.mapAttrsToList to_rathole_credential tunneled);

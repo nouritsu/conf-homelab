@@ -21,14 +21,14 @@
     };
 
     beszel-secrets = {config, ...}: {
-      sops.secrets."beszel-token" = {};
-      sops.secrets."beszel-key" = {};
+      sops.secrets."beszel/token" = {};
+      sops.secrets."beszel/key" = {};
 
       sops.templates."beszel.env" = {
         content = ''
           HUB_URL="http://localhost:8090"
-          KEY="${config.sops.placeholder."beszel-key"}"
-          TOKEN="${config.sops.placeholder."beszel-token"}"
+          KEY="${config.sops.placeholder."beszel/key"}"
+          TOKEN="${config.sops.placeholder."beszel/token"}"
         '';
       };
     };

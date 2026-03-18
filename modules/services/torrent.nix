@@ -72,11 +72,11 @@
     };
 
     myanonymouse-seedboxapi-secrets = {config, ...}: {
-      sops.secrets."myanonymouse-mam-id" = {};
+      sops.secrets."myanonymouse/mam-id" = {};
 
       sops.templates."myanonymouse.env" = {
         content = ''
-          MAM_ID=${config.sops.placeholder."myanonymouse-mam-id"}
+          MAM_ID=${config.sops.placeholder."myanonymouse/mam-id"}
         '';
       };
     };

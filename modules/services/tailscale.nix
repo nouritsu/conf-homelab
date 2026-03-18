@@ -49,11 +49,11 @@
     };
 
     tailscale-secrets = {config, ...}: {
-      sops.secrets."tailscale-authkey" = {};
+      sops.secrets."tailscale/authkey" = {};
 
       sops.templates."tailscale.env" = {
         content = ''
-          TS_AUTHKEY=${config.sops.placeholder."tailscale-authkey"}
+          TS_AUTHKEY=${config.sops.placeholder."tailscale/authkey"}
         '';
       };
     };

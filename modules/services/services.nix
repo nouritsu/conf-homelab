@@ -36,12 +36,12 @@
     };
 
     gluetun-secrets = {config, ...}: {
-      sops.secrets."airvpn-wg-key" = {};
-      sops.secrets."airvpn-wg-preshared-key" = {};
+      sops.secrets."airvpn/wg-key" = {};
+      sops.secrets."airvpn/wg-preshared-key" = {};
       sops.templates."gluetun.env" = {
         content = ''
-          WIREGUARD_PRIVATE_KEY=${config.sops.placeholder."airvpn-wg-key"}
-          WIREGUARD_PRESHARED_KEY=${config.sops.placeholder."airvpn-wg-preshared-key"}
+          WIREGUARD_PRIVATE_KEY=${config.sops.placeholder."airvpn/wg-key"}
+          WIREGUARD_PRESHARED_KEY=${config.sops.placeholder."airvpn/wg-preshared-key"}
         '';
       };
     };
@@ -59,13 +59,13 @@
       };
       sops.templates."rathole-credentials.toml".content = lib.mkBefore ''
         [client]
-        remote_addr = "${config.sops.placeholder."rathole-remote-addr"}"
+        remote_addr = "${config.sops.placeholder."rathole/remote-addr"}"
       '';
     };
 
     rathole-secrets = {...}: {
-      sops.secrets."rathole-token" = {};
-      sops.secrets."rathole-remote-addr" = {};
+      sops.secrets."rathole/token" = {};
+      sops.secrets."rathole/remote-addr" = {};
     };
 
     postfix = {
@@ -94,9 +94,10 @@
     };
 
     postfix-secrets = {config, ...}: {
-      sops.secrets."home-mail-password" = {};
+      sops.secrets."mail/home-password" = {};
+      sops.secrets."mail/home-mail" = {};
       sops.templates."mail-sasl-password" = {
-        content = "[smtp.hostinger.com]:465 home@nouritsu.com:${config.sops.placeholder."home-mail-password"}";
+        content = "[smtp.hostinger.com]:465 ${config.sops.placeholder."mail/home-mail"}:${config.sops.placeholder."mail/home-password"}";
       };
     };
   };
