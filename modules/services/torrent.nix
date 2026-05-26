@@ -1,4 +1,4 @@
-{self, ...}: {
+{
   flake.nixosModules = {
     srv-qbittorrent = {config, ...}: let
       endpoint = config.my.endpoints.torrent;
@@ -44,41 +44,31 @@
       ];
     };
 
-    srv-myanonymouse-seedboxapi = {config, ...}: {
-      imports = [
-        self.nixosModules.myanonymouse-seedboxapi-secrets
-      ];
+    srv-mousehole = {config, ...}: let
+      endpoint = config.my.endpoints.mousehole;
+    in {
+      my.endpoints.mousehole = {
+        enable = true;
+        tlsInternal = true;
+        port = 5010;
+        subdomain = "mam";
+      };
 
-      my.containers.myanonymouse-seedboxapi = {
+      my.containers.mousehole = {
         enable = true;
         vpn = true;
-
         image = {
           provider = "official";
-          owner = "myanonamouse";
-          name = "seedboxapi";
+          owner = "tmmrtn";
+          name = "mousehole";
         };
-
-        env.DEBUG = "1";
-
-        envFile = [config.sops.templates."myanonymouse.env".path];
-
-        vols = ["/data/myanonymouse:/config"];
+        ports = ["${toString endpoint.port}:5010"];
+        vols = ["/data/mousehole:/srv/mousehole"];
       };
 
       systemd.tmpfiles.rules = [
-        "d /data/myanonymouse 0775 1000 data -"
+        "d /data/mousehole 0775 1000 data -"
       ];
-    };
-
-    myanonymouse-seedboxapi-secrets = {config, ...}: {
-      sops.secrets."myanonymouse/mam-id" = {};
-
-      sops.templates."myanonymouse.env" = {
-        content = ''
-          MAM_ID=${config.sops.placeholder."myanonymouse/mam-id"}
-        '';
-      };
     };
   };
 }

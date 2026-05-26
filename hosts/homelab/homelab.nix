@@ -52,9 +52,10 @@
 
       # services
       srv-openrgb
+      srv-grocy
       srv-beszel
       srv-copyparty
-      srv-donetick
+      # srv-donetick
       srv-bookshelf
       srv-bazarr
       srv-cook-cli
@@ -76,7 +77,7 @@
       srv-documenso
       srv-syncthing
       srv-qbittorrent
-      srv-myanonymouse-seedboxapi
+      srv-mousehole
       srv-sabnzbd
       srv-vaultwarden
     ];

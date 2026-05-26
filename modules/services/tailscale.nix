@@ -18,7 +18,7 @@
 
         env = {
           TS_STATE_DIR = "/var/lib/tailscale";
-          TS_EXTRA_ARGS = "--login-server=https://vpn.nouritsu.com --advertise-exit-node --advertise-routes=192.168.178.0/24 --accept-dns=false";
+          TS_EXTRA_ARGS = "--reset --login-server=https://vpn.nouritsu.com --advertise-routes=192.168.178.0/24 --accept-dns=false";
         };
 
         envFile = [config.sops.templates."tailscale.env".path];
