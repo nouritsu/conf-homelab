@@ -1,5 +1,5 @@
 {
-  flake.nixosModules.audio = {pkgs, ...}: {
+  den.aspects.audio.nixos = {pkgs, ...}: {
     environment.systemPackages = [pkgs.pulseaudio];
 
     security.rtkit.enable = true;

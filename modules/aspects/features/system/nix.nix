@@ -1,16 +1,16 @@
 {
-  flake.nixosModules = {
-    nixpkgs-unfree = {...}: {
+  den.aspects = {
+    nixpkgs-unfree.nixos = {
       nixpkgs.config.allowUnfree = true;
     };
 
-    nix-base = {...}: {
+    nix-base.nixos = {
       programs.nix-ld.enable = true;
       nix.settings.trusted-users = ["root" "@wheel"];
       nix.settings.experimental-features = ["nix-command" "flakes"];
     };
 
-    nix-cache = {...}: {
+    nix-cache.nixos = {
       nix.settings = {
         substituters = [
           "https://cache.nixos.org"

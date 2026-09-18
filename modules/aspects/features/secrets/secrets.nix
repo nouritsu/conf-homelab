@@ -1,5 +1,5 @@
 {
-  flake.nixosModules.secrets = {
+  den.aspects.secrets.nixos = {
     pkgs,
     inputs,
     ...

@@ -1,6 +1,6 @@
 {
-  flake.nixosModules = {
-    storage = {pkgs, ...}: let
+  den.aspects = {
+    storage.nixos = {pkgs, ...}: let
       hdd-opts = [
         "defaults"
         "nofail"
@@ -54,7 +54,7 @@
       };
     };
 
-    fs-xfs = {pkgs, ...}: {
+    fs-xfs.nixos = {pkgs, ...}: {
       boot.kernelModules = ["xfs"];
       boot.supportedFilesystems = [
         "xfs"
@@ -70,7 +70,7 @@
       ];
     };
 
-    fs-btrfs = {pkgs, ...}: {
+    fs-btrfs.nixos = {pkgs, ...}: {
       boot.supportedFilesystems = [
         "btrfs"
       ];

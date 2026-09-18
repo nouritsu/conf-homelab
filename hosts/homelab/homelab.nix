@@ -1,12 +1,11 @@
 {
   inputs,
   self,
+  den,
   ...
 }: {
-  den.aspects.homelab.nixos = {
-    imports = with self.nixosModules; [
-      homelab-system
-      homelab-disko
+  den.aspects.homelab = {
+    includes = with den.aspects; [
       secrets
 
       # system
@@ -37,6 +36,12 @@
       app-fish
       app-nh
       # app-kodi
+    ];
+
+    # not yet converted to aspects
+    nixos.imports = with self.nixosModules; [
+      homelab-system
+      homelab-disko
 
       # infrastructure
       caddy

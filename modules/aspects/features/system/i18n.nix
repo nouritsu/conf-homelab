@@ -1,10 +1,10 @@
 {
-  flake.nixosModules = {
-    auto-tz = {...}: {
+  den.aspects = {
+    auto-tz.nixos = {
       services.automatic-timezoned.enable = true;
     };
 
-    locale = {...}: {
+    locale.nixos = {
       i18n = {
         defaultLocale = "en_GB.UTF-8";
         extraLocaleSettings = {

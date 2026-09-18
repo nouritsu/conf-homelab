@@ -1,5 +1,5 @@
 {
-  flake.nixosModules.network = {...}: {
+  den.aspects.network.nixos = {
     networking.networkmanager.enable = true;
 
     networking.firewall.enable = true;

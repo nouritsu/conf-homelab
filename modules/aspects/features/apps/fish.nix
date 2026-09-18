@@ -1,5 +1,5 @@
 {
-  flake.nixosModules.app-fish = {pkgs, ...}: {
+  den.aspects.app-fish.nixos = {pkgs, ...}: {
     users.defaultUserShell = pkgs.fish;
 
     environment.systemPackages = with pkgs.fishPlugins; [

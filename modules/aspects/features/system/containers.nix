@@ -1,5 +1,8 @@
 {
-  flake.nixosModules.containers = {
+  # a class body is a full NixOS module, so the submodule-extending option
+  # declaration ports unchanged. It must stay free of entity args (host/user)
+  # or den would emit the option declaration once per entity.
+  den.aspects.containers.nixos = {
     config,
     lib,
     pkgs,

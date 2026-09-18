@@ -1,5 +1,5 @@
 {
-  flake.nixosModules.user-aneesh = {...}: {
+  den.aspects.user-aneesh.nixos = {
     users.users.aneesh = {
       isNormalUser = true;
       extraGroups = ["wheel" "networkmanager" "data" "pipewire"];

@@ -1,5 +1,5 @@
 {
-  flake.nixosModules.virt-podman = {pkgs, ...}: {
+  den.aspects.virt-podman.nixos = {pkgs, ...}: {
     virtualisation.podman = {
       enable = true;
       dockerCompat = true;

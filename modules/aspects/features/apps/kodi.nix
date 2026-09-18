@@ -1,5 +1,5 @@
 {
-  flake.nixosModules.app-kodi = {
+  den.aspects.app-kodi.nixos = {
     pkgs,
     lib,
     ...
