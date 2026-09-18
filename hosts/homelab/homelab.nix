@@ -36,18 +36,18 @@
       app-fish
       app-nh
       # app-kodi
-    ];
-
-    # not yet converted to aspects
-    nixos.imports = with self.nixosModules; [
-      homelab-system
-      homelab-disko
 
       # infrastructure
       caddy
       gluetun
       rathole
       postfix
+    ];
+
+    # not yet converted to aspects
+    nixos.imports = with self.nixosModules; [
+      homelab-system
+      homelab-disko
 
       # services
       srv-openrgb
