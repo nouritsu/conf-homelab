@@ -6,6 +6,7 @@
     nixos-raspberrypi.url = "github:nvmd/nixos-raspberrypi/main";
     flake-parts.url = "github:hercules-ci/flake-parts";
     import-tree.url = "github:vic/import-tree";
+    den.url = "github:denful/den";
     disko.url = "github:nix-community/disko";
     sops-nix.url = "github:Mic92/sops-nix";
   };
@@ -16,8 +17,7 @@
     ...
   }:
     flake-parts.lib.mkFlake {inherit inputs;} {
-      systems = ["x86_64-linux" "aarch64-linux"];
-
+      # `systems` is set by den, from `den.systems` in modules/flake/den.nix
       imports = [
         ./lib.nix
         (import-tree ./hosts)

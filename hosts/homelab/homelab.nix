@@ -3,13 +3,8 @@
   self,
   ...
 }: {
-  flake.nixosConfigurations.homelab = inputs.nixos-raspberrypi.lib.nixosSystem {
-    specialArgs = {
-      inherit inputs;
-      inherit (inputs) nixos-raspberrypi;
-    };
-
-    modules = with self.nixosModules; [
+  den.aspects.homelab.nixos = {
+    imports = with self.nixosModules; [
       homelab-system
       homelab-disko
       secrets
