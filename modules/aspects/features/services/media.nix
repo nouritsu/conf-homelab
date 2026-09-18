@@ -1,6 +1,6 @@
-{self, ...}: {
-  flake.nixosModules.srv-jellyseerr = {...}: let
-    inherit (self.lib) endpoint;
+{den, ...}: {
+  den.aspects.srv-jellyseerr.nixos = {...}: let
+    inherit (den.lib.homelab) endpoint;
   in {
     imports = [
       (endpoint {

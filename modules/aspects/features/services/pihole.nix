@@ -1,6 +1,6 @@
-{self, ...}: {
-  flake.nixosModules.srv-pihole = {pkgs, ...}: let
-    inherit (self.lib) endpoint host-ip;
+{den, ...}: {
+  den.aspects.srv-pihole.nixos = {pkgs, ...}: let
+    inherit (den.lib.homelab) endpoint host-ip;
     port = 8081;
 
     TWELVE_HOURS_SECONDS = 43200;

@@ -1,6 +1,6 @@
-{self, ...}: {
-  flake.nixosModules.srv-grocy = {...}: let
-    inherit (self.lib) endpoint;
+{den, ...}: {
+  den.aspects.srv-grocy.nixos = {...}: let
+    inherit (den.lib.homelab) endpoint;
     port = 9283;
   in {
     imports = [

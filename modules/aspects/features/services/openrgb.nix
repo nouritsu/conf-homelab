@@ -1,5 +1,5 @@
 {
-  flake.nixosModules.srv-openrgb = {
+  den.aspects.srv-openrgb.nixos = {
     pkgs,
     lib,
     ...

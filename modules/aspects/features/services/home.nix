@@ -1,6 +1,6 @@
-{self, ...}: {
-  flake.nixosModules.srv-homeassistant = {...}: let
-    inherit (self.lib) endpoint;
+{den, ...}: {
+  den.aspects.srv-homeassistant.nixos = {...}: let
+    inherit (den.lib.homelab) endpoint;
     port = 8123;
   in {
     imports = [

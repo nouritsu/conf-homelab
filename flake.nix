@@ -19,7 +19,6 @@
     flake-parts.lib.mkFlake {inherit inputs;} {
       # `systems` is set by den, from `den.systems` in modules/flake/den.nix
       imports = [
-        ./lib.nix
         (import-tree ./hosts)
         (import-tree ./modules)
         ./shell.nix

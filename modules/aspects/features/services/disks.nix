@@ -1,6 +1,6 @@
-{self, ...}: {
-  flake.nixosModules.srv-scrutiny = {...}: let
-    inherit (self.lib) endpoint;
+{den, ...}: {
+  den.aspects.srv-scrutiny.nixos = {...}: let
+    inherit (den.lib.homelab) endpoint;
     port = 8180;
 
     root = "/dev/nvme0n1";

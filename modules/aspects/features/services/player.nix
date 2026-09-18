@@ -1,6 +1,6 @@
-{self, ...}: {
-  flake.nixosModules.srv-jellyfin = {...}: let
-    inherit (self.lib) endpoint;
+{den, ...}: {
+  den.aspects.srv-jellyfin.nixos = {...}: let
+    inherit (den.lib.homelab) endpoint;
     port = 8096;
   in {
     imports = [

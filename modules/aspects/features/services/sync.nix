@@ -1,6 +1,6 @@
-{self, ...}: {
-  flake.nixosModules.srv-syncthing = {...}: let
-    inherit (self.lib) endpoint;
+{den, ...}: {
+  den.aspects.srv-syncthing.nixos = {...}: let
+    inherit (den.lib.homelab) endpoint;
     port = 8384;
   in {
     imports = [

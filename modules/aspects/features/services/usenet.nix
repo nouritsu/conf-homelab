@@ -1,6 +1,6 @@
-{self, ...}: {
-  flake.nixosModules.srv-sabnzbd = {...}: let
-    inherit (self.lib) endpoint fqdn via-gluetun;
+{den, ...}: {
+  den.aspects.srv-sabnzbd.nixos = {...}: let
+    inherit (den.lib.homelab) endpoint fqdn via-gluetun;
     port = 8083;
   in {
     imports = [

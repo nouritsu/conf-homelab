@@ -1,6 +1,6 @@
-{self, ...}: {
-  flake.nixosModules.srv-roundcube = {...}: let
-    inherit (self.lib) endpoint fqdn;
+{den, ...}: {
+  den.aspects.srv-roundcube.nixos = {...}: let
+    inherit (den.lib.homelab) endpoint fqdn;
     domain = fqdn "mail";
     port = 8001;
   in {

@@ -1,6 +1,6 @@
-{self, ...}: {
-  flake.nixosModules.srv-cook-cli = {...}: let
-    inherit (self.lib) endpoint;
+{den, ...}: {
+  den.aspects.srv-cook-cli.nixos = {...}: let
+    inherit (den.lib.homelab) endpoint;
     port = 9080;
   in {
     imports = [

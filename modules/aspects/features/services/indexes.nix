@@ -1,6 +1,6 @@
-{self, ...}: {
-  flake.nixosModules.srv-prowlarr = {...}: let
-    inherit (self.lib) endpoint via-gluetun;
+{den, ...}: {
+  den.aspects.srv-prowlarr.nixos = {...}: let
+    inherit (den.lib.homelab) endpoint via-gluetun;
     port = 8084;
   in {
     imports = [

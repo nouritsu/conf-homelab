@@ -42,12 +42,6 @@
       gluetun
       rathole
       postfix
-    ];
-
-    # not yet converted to aspects
-    nixos.imports = with self.nixosModules; [
-      homelab-system
-      homelab-disko
 
       # services
       srv-openrgb
@@ -71,6 +65,12 @@
       srv-mousehole
       srv-sabnzbd
     ];
+
+    # not yet converted to aspects
+    nixos.imports = with self.nixosModules; [
+      homelab-system
+      homelab-disko
+    ];
   };
 
   flake.nixosModules = {
@@ -86,7 +86,7 @@
         ];
 
       networking.hostName = "homelab";
-      networking.domain = self.lib.base-domain;
+      networking.domain = den.lib.homelab.base-domain;
 
       boot.loader.raspberry-pi.bootloader = "kernel";
       environment.systemPackages = [pkgs.raspberrypi-eeprom];

@@ -1,6 +1,6 @@
-{self, ...}: {
-  flake.nixosModules.srv-bookshelf = {config, ...}: let
-    inherit (self.lib) endpoint via-gluetun;
+{den, ...}: {
+  den.aspects.srv-bookshelf.nixos = {config, ...}: let
+    inherit (den.lib.homelab) endpoint via-gluetun;
     port = 8787;
   in {
     imports = [

@@ -1,7 +1,7 @@
-{self, ...}: {
-  flake.nixosModules = {
-    srv-qbittorrent = {...}: let
-      inherit (self.lib) endpoint via-gluetun;
+{den, ...}: {
+  den.aspects = {
+    srv-qbittorrent.nixos = let
+      inherit (den.lib.homelab) endpoint via-gluetun;
       port = 8082;
     in {
       imports = [
@@ -39,8 +39,8 @@
       ];
     };
 
-    srv-mousehole = {...}: let
-      inherit (self.lib) endpoint via-gluetun;
+    srv-mousehole.nixos = let
+      inherit (den.lib.homelab) endpoint via-gluetun;
       port = 5010;
     in {
       imports = [

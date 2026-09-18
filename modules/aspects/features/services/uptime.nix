@@ -1,6 +1,6 @@
-{self, ...}: {
-  flake.nixosModules.srv-uptime-kuma = {...}: let
-    inherit (self.lib) endpoint;
+{den, ...}: {
+  den.aspects.srv-uptime-kuma.nixos = {...}: let
+    inherit (den.lib.homelab) endpoint;
     port = 4000;
   in {
     imports = [
