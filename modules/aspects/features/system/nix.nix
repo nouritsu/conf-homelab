@@ -1,9 +1,5 @@
 {
   den.aspects = {
-    nixpkgs-unfree.nixos = {
-      nixpkgs.config.allowUnfree = true;
-    };
-
     nix-base.nixos = {
       programs.nix-ld.enable = true;
       nix.settings.trusted-users = ["root" "@wheel"];

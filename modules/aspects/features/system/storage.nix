@@ -59,10 +59,6 @@
       boot.supportedFilesystems = [
         "xfs"
       ];
-      boot.kernel.sysctl = {
-        "vm.max_map_count" = 262144;
-      };
-
       environment.systemPackages = [
         pkgs.libxfs
         pkgs.xfsprogs
@@ -79,7 +75,6 @@
         pkgs.btrfs-progs
         pkgs.compsize
         pkgs.snapper
-        pkgs.snapper-gui
       ];
     };
   };

@@ -58,6 +58,10 @@
     };
 
     config = {
+      # some container workloads (search indexers, databases) need far more
+      # mmap regions than the default 65530
+      boot.kernel.sysctl."vm.max_map_count" = 262144;
+
       # every container is restarted nightly; a service opts out with
       #   systemd.timers.restart-container-<name>.enable = false;
       systemd.services = lib.mapAttrs' (name: _:

@@ -1,9 +1,11 @@
-{
+{den, ...}: {
   den.aspects.postfix.nixos = {
     config,
     pkgs,
     ...
-  }: {
+  }: let
+    inherit (den.lib.homelab) base-domain;
+  in {
     sops.secrets."mail/home-password" = {};
     sops.secrets."mail/home-mail" = {};
     sops.templates."mail-sasl-password" = {
@@ -13,10 +15,10 @@
     services.postfix = {
       enable = true;
       settings.main = {
-        mydomain = "nouritsu.com";
-        myorigin = "nouritsu.com";
+        mydomain = base-domain;
+        myorigin = base-domain;
         mydestination = [];
-        mynetworks = ["127.0.0.0/8" "[::1]/128" "192.168.1.0/24"];
+        mynetworks = ["127.0.0.0/8" "[::1]/128" "192.168.178.0/24"];
         relayhost = ["[smtp.hostinger.com]:465"];
         smtp_tls_security_level = "encrypt";
         smtp_tls_wrappermode = "yes";

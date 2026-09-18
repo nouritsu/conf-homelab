@@ -5,7 +5,8 @@
       dockerCompat = true;
     };
 
-    environment.systemPackages = [pkgs.podman pkgs.lazydocker pkgs.docker-compose];
+    # podman itself comes from virtualisation.podman.enable
+    environment.systemPackages = [pkgs.lazydocker pkgs.docker-compose];
 
     systemd.sockets.podman.enable = true;
     users.users.aneesh.extraGroups = ["podman"];

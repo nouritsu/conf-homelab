@@ -7,7 +7,6 @@
 
     nix-base
     nix-cache
-    nixpkgs-unfree
 
     ssh-base
     ssh-from-pc
