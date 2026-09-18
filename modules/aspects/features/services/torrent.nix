@@ -1,64 +1,63 @@
-{den, ...}: {
+{den, ...}: let
+  qbit-port = 8082;
+  mam-port = 5010;
+in {
   den.aspects = {
-    srv-qbittorrent.nixos = let
-      inherit (den.lib.homelab) endpoint via-gluetun;
-      port = 8082;
-    in {
-      imports = [
-        (endpoint {
-          subdomain = "torrent";
-          inherit port;
-        })
-        (via-gluetun "qbittorrent" ["${toString port}:8081"])
-      ];
+    srv-qbittorrent = {
+      endpoint = {
+        subdomain = "torrent";
+        port = qbit-port;
+      };
+      gluetun-ports = ["${toString qbit-port}:8081"];
 
-      virtualisation.oci-containers.containers.qbittorrent = {
-        image = "lscr.io/linuxserver/qbittorrent:latest";
+      nixos = {
+        imports = [(den.lib.homelab.via-gluetun "qbittorrent")];
 
-        environment = {
-          WEBUI_PORT = "8081";
-          TORRENTING_PORT = "59610";
+        virtualisation.oci-containers.containers.qbittorrent = {
+          image = "lscr.io/linuxserver/qbittorrent:latest";
 
-          DOCKER_MODS = "ghcr.io/themepark-dev/theme.park:vuetorrent";
-          TP_THEME = "catppuccin-mocha";
-          TP_COMMUNITY_THEME = "true";
+          environment = {
+            WEBUI_PORT = "8081";
+            TORRENTING_PORT = "59610";
+
+            DOCKER_MODS = "ghcr.io/themepark-dev/theme.park:vuetorrent";
+            TP_THEME = "catppuccin-mocha";
+            TP_COMMUNITY_THEME = "true";
+          };
+
+          volumes = ["/data/qbittorrent:/config" "/media/download:/data"];
         };
 
-        volumes = ["/data/qbittorrent:/config" "/media/download:/data"];
+        systemd.tmpfiles.rules = [
+          "d /data/qbittorrent 0775 1000 data -"
+          "d /media/download/torrent 2775 1000 data -"
+          "d /media/download/torrent/torrents 2775 1000 data -"
+          "d /media/download/torrent/incomplete 2775 1000 data -"
+          "d /media/download/torrent/complete 2775 1000 data -"
+          "d /media/download/torrent/complete/movies 2775 1000 data -"
+          "d /media/download/torrent/complete/shows 2775 1000 data -"
+          "d /media/download/torrent/complete/books 2775 1000 data -"
+        ];
       };
-
-      systemd.tmpfiles.rules = [
-        "d /data/qbittorrent 0775 1000 data -"
-        "d /media/download/torrent 2775 1000 data -"
-        "d /media/download/torrent/torrents 2775 1000 data -"
-        "d /media/download/torrent/incomplete 2775 1000 data -"
-        "d /media/download/torrent/complete 2775 1000 data -"
-        "d /media/download/torrent/complete/movies 2775 1000 data -"
-        "d /media/download/torrent/complete/shows 2775 1000 data -"
-        "d /media/download/torrent/complete/books 2775 1000 data -"
-      ];
     };
 
-    srv-mousehole.nixos = let
-      inherit (den.lib.homelab) endpoint via-gluetun;
-      port = 5010;
-    in {
-      imports = [
-        (endpoint {
-          subdomain = "mam";
-          inherit port;
-        })
-        (via-gluetun "mousehole" ["${toString port}:5010"])
-      ];
-
-      virtualisation.oci-containers.containers.mousehole = {
-        image = "tmmrtn/mousehole:latest";
-        volumes = ["/data/mousehole:/srv/mousehole"];
+    srv-mousehole = {
+      endpoint = {
+        subdomain = "mam";
+        port = mam-port;
       };
+      gluetun-ports = ["${toString mam-port}:5010"];
 
-      systemd.tmpfiles.rules = [
-        "d /data/mousehole 0775 1000 data -"
-      ];
+      nixos = {
+        imports = [(den.lib.homelab.via-gluetun "mousehole")];
+
+        virtualisation.oci-containers.containers.mousehole = {
+          image = "tmmrtn/mousehole:latest";
+          volumes = ["/data/mousehole:/srv/mousehole"];
+        };
+
+        systemd.tmpfiles.rules = ["d /data/mousehole 0775 1000 data -"];
+      };
     };
   };
 }

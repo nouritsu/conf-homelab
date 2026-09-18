@@ -1,16 +1,13 @@
-{den, ...}: {
-  den.aspects.srv-uptime-kuma.nixos = {...}: let
-    inherit (den.lib.homelab) endpoint;
+{
+  den.aspects.srv-uptime-kuma = let
     port = 4000;
   in {
-    imports = [
-      (endpoint {
-        subdomain = "uptime";
-        inherit port;
-      })
-    ];
+    endpoint = {
+      subdomain = "uptime";
+      inherit port;
+    };
 
-    services.uptime-kuma = {
+    nixos.services.uptime-kuma = {
       enable = true;
       settings.PORT = toString port;
     };

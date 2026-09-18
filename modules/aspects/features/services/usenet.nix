@@ -1,51 +1,52 @@
-{den, ...}: {
-  den.aspects.srv-sabnzbd.nixos = {...}: let
-    inherit (den.lib.homelab) endpoint fqdn via-gluetun;
-    port = 8083;
-  in {
-    imports = [
-      (endpoint {
-        subdomain = "usenet";
-        inherit port;
-      })
-      (via-gluetun "sabnzbd" ["${toString port}:8080"])
-    ];
+{den, ...}: let
+  port = 8083;
+in {
+  den.aspects.srv-sabnzbd = {
+    endpoint = {
+      subdomain = "usenet";
+      inherit port;
+    };
+    gluetun-ports = ["${toString port}:8080"];
 
-    virtualisation.oci-containers.containers.sabnzbd = {
-      image = "lscr.io/linuxserver/sabnzbd:latest";
+    nixos = {
+      imports = [(den.lib.homelab.via-gluetun "sabnzbd")];
 
-      environment = {
-        DOCKER_MODS = "ghcr.io/themepark-dev/theme.park:sabnzbd";
-        TP_THEME = "catppuccin-mocha";
-        TP_COMMUNITY_THEME = "true";
+      virtualisation.oci-containers.containers.sabnzbd = {
+        image = "lscr.io/linuxserver/sabnzbd:latest";
+
+        environment = {
+          DOCKER_MODS = "ghcr.io/themepark-dev/theme.park:sabnzbd";
+          TP_THEME = "catppuccin-mocha";
+          TP_COMMUNITY_THEME = "true";
+        };
+
+        volumes = ["/data/sabnzbd:/config" "/media/download:/data"];
       };
 
-      volumes = ["/data/sabnzbd:/config" "/media/download:/data"];
-    };
+      systemd.tmpfiles.rules = [
+        "d /data/sabnzbd 0775 1000 data -"
+        "d /media/download/usenet 2775 1000 data -"
+        "d /media/download/usenet/nzbs 2775 1000 data -"
+        "d /media/download/usenet/incomplete 2775 1000 data -"
+        "d /media/download/usenet/complete 2775 1000 data -"
+      ];
 
-    systemd.tmpfiles.rules = [
-      "d /data/sabnzbd 0775 1000 data -"
-      "d /media/download/usenet 2775 1000 data -"
-      "d /media/download/usenet/nzbs 2775 1000 data -"
-      "d /media/download/usenet/incomplete 2775 1000 data -"
-      "d /media/download/usenet/complete 2775 1000 data -"
-    ];
+      systemd.services.podman-sabnzbd.preStart = ''
+        mkdir -p /data/sabnzbd
 
-    systemd.services.podman-sabnzbd.preStart = ''
-      mkdir -p /data/sabnzbd
+        config_file="/data/sabnzbd/sabnzbd.ini"
+        whitelist_hosts="${den.lib.homelab.fqdn "usenet"}, localhost, 127.0.0.1"
 
-      config_file="/data/sabnzbd/sabnzbd.ini"
-      whitelist_hosts="${fqdn "usenet"}, localhost, 127.0.0.1"
-
-      if [ -f "$config_file" ]; then
-        if grep -q "^host_whitelist" "$config_file"; then
-          sed -i "s|^host_whitelist.*|host_whitelist = $whitelist_hosts|" "$config_file"
-        else
-          if grep -q "^\[misc\]" "$config_file"; then
-            sed -i "/^\[misc\]/a host_whitelist = $whitelist_hosts" "$config_file"
+        if [ -f "$config_file" ]; then
+          if grep -q "^host_whitelist" "$config_file"; then
+            sed -i "s|^host_whitelist.*|host_whitelist = $whitelist_hosts|" "$config_file"
+          else
+            if grep -q "^\[misc\]" "$config_file"; then
+              sed -i "/^\[misc\]/a host_whitelist = $whitelist_hosts" "$config_file"
+            fi
           fi
         fi
-      fi
-    '';
+      '';
+    };
   };
 }

@@ -1,7 +1,5 @@
 {den, ...}: {
-  den.aspects.srv-tailscale.nixos = {config, ...}: let
-    inherit (den.lib.homelab) fqdn;
-  in {
+  den.aspects.srv-tailscale.nixos = {config, ...}: {
     sops.secrets."tailscale/authkey" = {};
 
     sops.templates."tailscale.env" = {
@@ -15,7 +13,7 @@
 
       environment = {
         TS_STATE_DIR = "/var/lib/tailscale";
-        TS_EXTRA_ARGS = "--reset --login-server=https://${fqdn "vpn"} --advertise-routes=192.168.178.0/24 --accept-dns=false";
+        TS_EXTRA_ARGS = "--reset --login-server=https://${den.lib.homelab.fqdn "vpn"} --advertise-routes=192.168.178.0/24 --accept-dns=false";
       };
 
       environmentFiles = [config.sops.templates."tailscale.env".path];

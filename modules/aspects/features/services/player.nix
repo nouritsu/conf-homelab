@@ -1,22 +1,21 @@
-{den, ...}: {
-  den.aspects.srv-jellyfin.nixos = {...}: let
-    inherit (den.lib.homelab) endpoint;
+{
+  den.aspects.srv-jellyfin = let
     port = 8096;
   in {
-    imports = [
-      (endpoint {
-        subdomain = "player";
-        inherit port;
-      })
-    ];
-
-    virtualisation.oci-containers.containers.jellyfin = {
-      image = "lscr.io/linuxserver/jellyfin:latest";
-      ports = ["${toString port}:8096"];
-      extraOptions = ["--device=/dev/dri:/dev/dri"];
-      volumes = ["/data/jellyfin:/config" "/media/media:/media:ro"];
+    endpoint = {
+      subdomain = "player";
+      inherit port;
     };
 
-    systemd.tmpfiles.rules = ["d /data/jellyfin 0775 1000 data -"];
+    nixos = {
+      virtualisation.oci-containers.containers.jellyfin = {
+        image = "lscr.io/linuxserver/jellyfin:latest";
+        ports = ["${toString port}:8096"];
+        extraOptions = ["--device=/dev/dri:/dev/dri"];
+        volumes = ["/data/jellyfin:/config" "/media/media:/media:ro"];
+      };
+
+      systemd.tmpfiles.rules = ["d /data/jellyfin 0775 1000 data -"];
+    };
   };
 }

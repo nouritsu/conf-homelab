@@ -1,5 +1,12 @@
 {
-  den.aspects.gluetun.nixos = {config, ...}: {
+  # consumes the `gluetun-ports` quirk: every port a service behind this vpn
+  # container needs published
+  den.aspects.gluetun.nixos = {
+    gluetun-ports,
+    config,
+    lib,
+    ...
+  }: {
     sops.secrets."airvpn/wg-key" = {};
     sops.secrets."airvpn/wg-preshared-key" = {};
     sops.templates."gluetun.env" = {
@@ -24,7 +31,9 @@
         "--cap-add=NET_RAW"
         "--device=/dev/net/tun:/dev/net/tun"
       ];
-      ports = ["8888:8888" "8388:8388" "59610:59610" "59610:59610/udp"];
+      ports =
+        ["8888:8888" "8388:8388" "59610:59610" "59610:59610/udp"]
+        ++ lib.sort (a: b: a < b) gluetun-ports;
     };
 
     systemd.timers.restart-container-gluetun.enable = false; # vpn

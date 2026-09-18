@@ -1,9 +1,13 @@
-{
+{den, ...}: {
+  # consumes the `endpoint` quirk: one vhost per service that declared one
   den.aspects.caddy.nixos = {
-    config,
+    endpoint,
     lib,
     ...
-  }: {
+  }: let
+    inherit (den.lib.homelab) fqdn;
+    sorted = lib.sort (a: b: a.subdomain < b.subdomain) endpoint;
+  in {
     services.caddy.enable = true;
     networking.firewall.allowedTCPPorts = [80 443];
 
@@ -11,13 +15,24 @@
       ../../../../assets/caddy.crt
     ];
 
-    # two endpoints claiming one domain merge into a single vhost rather than
-    # conflicting, so catch it here
-    assertions =
-      lib.mapAttrsToList (domain: vhost: {
-        assertion = lib.count (lib.hasInfix "reverse_proxy") (lib.splitString "\n" vhost.extraConfig) <= 1;
-        message = "caddy: ${domain} has more than one reverse_proxy - two endpoints claim this domain";
+    services.caddy.virtualHosts = lib.listToAttrs (map (e:
+      lib.nameValuePair (fqdn e.subdomain) {
+        extraConfig = ''
+          ${lib.optionalString (!(e.tunnel or false)) "tls internal"}
+          reverse_proxy localhost:${toString e.port}
+        '';
       })
-      config.services.caddy.virtualHosts;
+    sorted);
+
+    # two endpoints on one subdomain would silently collapse into a single
+    # vhost, so catch it on the pool rather than on the generated config
+    assertions = let
+      subdomains = map (e: e.subdomain) endpoint;
+    in [
+      {
+        assertion = lib.length (lib.unique subdomains) == lib.length subdomains;
+        message = "caddy: two endpoints claim the same subdomain (${lib.concatStringsSep ", " (lib.sort (a: b: a < b) subdomains)})";
+      }
+    ];
   };
 }
