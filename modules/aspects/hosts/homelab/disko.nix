@@ -1,5 +1,5 @@
 {inputs, ...}: {
-  flake.nixosModules.homelab-disko = {
+  den.aspects.homelab-disko.nixos = {
     imports = [
       inputs.disko.nixosModules.disko
     ];
