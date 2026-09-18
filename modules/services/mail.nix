@@ -1,16 +1,19 @@
-{
-  flake.nixosModules.srv-roundcube = {config, ...}: let
-    endpoint = config.my.endpoints.roundcube;
+{self, ...}: {
+  flake.nixosModules.srv-roundcube = {...}: let
+    inherit (self.lib) endpoint fqdn;
+    domain = fqdn "mail";
+    port = 8001;
   in {
-    my.endpoints.roundcube = {
-      enable = true;
-      tlsInternal = true;
-      port = 8001;
-      subdomain = "mail";
-    };
+    imports = [
+      (endpoint {
+        subdomain = "mail";
+        inherit port;
+      })
+    ];
+
     services.roundcube = {
       enable = true;
-      hostName = endpoint.domain;
+      hostName = domain;
       extraConfig = ''
         $config['default_host'] = 'ssl://imap.hostinger.com';
         $config['default_port'] = 993;
@@ -20,11 +23,11 @@
         $config['smtp_pass'] = '%p';
       '';
     };
-    services.nginx.virtualHosts.${endpoint.domain} = {
+    services.nginx.virtualHosts.${domain} = {
       listen = [
         {
           addr = "127.0.0.1";
-          port = endpoint.port;
+          inherit port;
         }
       ];
       forceSSL = false;

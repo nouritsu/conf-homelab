@@ -1,20 +1,21 @@
-{
-  flake.nixosModules.srv-prowlarr = {config, ...}: let
-    endpoint = config.my.endpoints.prowlarr;
+{self, ...}: {
+  flake.nixosModules.srv-prowlarr = {...}: let
+    inherit (self.lib) endpoint via-gluetun;
+    port = 8084;
   in {
-    my.endpoints.prowlarr = {
-      enable = true;
-      tlsInternal = true;
-      port = 8084;
-      subdomain = "indexes";
+    imports = [
+      (endpoint {
+        subdomain = "indexes";
+        inherit port;
+      })
+      (via-gluetun "prowlarr" ["${toString port}:9696"])
+    ];
+
+    virtualisation.oci-containers.containers.prowlarr = {
+      image = "lscr.io/linuxserver/prowlarr:latest";
+      volumes = ["/data/prowlarr:/config"];
     };
-    my.containers.prowlarr = {
-      enable = true;
-      vpn = true;
-      image.provider = "lscr";
-      ports = ["${toString endpoint.port}:9696"];
-      vols = ["/data/prowlarr:/config"];
-    };
+
     systemd.tmpfiles.rules = ["d /data/prowlarr 0775 1000 data -"];
   };
 }

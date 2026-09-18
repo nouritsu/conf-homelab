@@ -1,27 +1,23 @@
 {self, ...}: {
   flake.nixosModules = {
     srv-copyparty = {config, ...}: let
-      endpoint = config.my.endpoints.copyparty;
+      inherit (self.lib) endpoint;
+      port = 3923;
     in {
-      imports = [self.nixosModules.copyparty-secrets];
+      imports = [
+        self.nixosModules.copyparty-secrets
+        (endpoint {
+          subdomain = "files";
+          inherit port;
+        })
+      ];
 
-      my.endpoints.copyparty = {
-        enable = true;
-        tlsInternal = true;
-        port = 3923;
-        subdomain = "files";
-      };
+      virtualisation.oci-containers.containers.copyparty = {
+        image = "copyparty/dj:latest";
 
-      my.containers.copyparty = {
-        enable = true;
-        image = {
-          name = "dj";
-          provider = "official";
-        };
+        ports = ["${toString port}:3923"];
 
-        ports = ["${toString endpoint.port}:3923"];
-
-        vols = [
+        volumes = [
           "/data/copyparty:/cfg"
           "${config.sops.templates."copyparty.conf".path}:/cfg/copyparty.conf:ro"
           "/data:/data:ro"

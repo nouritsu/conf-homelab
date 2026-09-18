@@ -1,14 +1,18 @@
-{
-  flake.nixosModules.srv-uptime-kuma = {...}: {
-    my.endpoints.uptime-kuma = {
-      enable = true;
-      tlsInternal = true;
-      port = 4000;
-      subdomain = "uptime";
-    };
+{self, ...}: {
+  flake.nixosModules.srv-uptime-kuma = {...}: let
+    inherit (self.lib) endpoint;
+    port = 4000;
+  in {
+    imports = [
+      (endpoint {
+        subdomain = "uptime";
+        inherit port;
+      })
+    ];
+
     services.uptime-kuma = {
       enable = true;
-      settings.PORT = "4000";
+      settings.PORT = toString port;
     };
   };
 }

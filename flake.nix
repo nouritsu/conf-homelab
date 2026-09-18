@@ -19,7 +19,7 @@
       systems = ["x86_64-linux" "aarch64-linux"];
 
       imports = [
-        (import-tree ./options)
+        ./lib.nix
         (import-tree ./hosts)
         (import-tree ./modules)
         ./shell.nix

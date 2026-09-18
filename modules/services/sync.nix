@@ -1,16 +1,18 @@
-{
-  flake.nixosModules.srv-syncthing = {config, ...}: let
-    endpoint = config.my.endpoints.syncthing;
+{self, ...}: {
+  flake.nixosModules.srv-syncthing = {...}: let
+    inherit (self.lib) endpoint;
+    port = 8384;
   in {
-    my.endpoints.syncthing = {
-      enable = true;
-      tlsInternal = true;
-      port = 8384;
-      subdomain = "sync";
-    };
+    imports = [
+      (endpoint {
+        subdomain = "sync";
+        inherit port;
+      })
+    ];
+
     services.syncthing = {
       enable = true;
-      guiAddress = "127.0.0.1:${toString endpoint.port}";
+      guiAddress = "127.0.0.1:${toString port}";
       openDefaultPorts = true;
       settings = {
         gui = {

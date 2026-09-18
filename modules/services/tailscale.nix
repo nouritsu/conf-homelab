@@ -5,36 +5,30 @@
         self.nixosModules.tailscale-secrets
       ];
 
-      my.containers.tailscale = {
-        enable = true;
-        restart.enable = false; # vpn
+      virtualisation.oci-containers.containers.tailscale = {
+        image = "ghcr.io/tailscale/tailscale:latest";
 
-        image = {
-          provider = "ghcr";
-          owner = "tailscale";
-          name = "tailscale";
-          tag = "latest";
-        };
-
-        env = {
+        environment = {
           TS_STATE_DIR = "/var/lib/tailscale";
-          TS_EXTRA_ARGS = "--reset --login-server=https://vpn.nouritsu.com --advertise-routes=192.168.178.0/24 --accept-dns=false";
+          TS_EXTRA_ARGS = "--reset --login-server=https://${self.lib.fqdn "vpn"} --advertise-routes=192.168.178.0/24 --accept-dns=false";
         };
 
-        envFile = [config.sops.templates."tailscale.env".path];
+        environmentFiles = [config.sops.templates."tailscale.env".path];
 
-        vols = [
+        volumes = [
           "/data/tailscale:/var/lib/tailscale"
           "/dev/net/tun:/dev/net/tun"
         ];
 
-        extra-options = [
+        extraOptions = [
           "--network=host"
           "--cap-add=NET_ADMIN"
           "--cap-add=NET_RAW"
           "--privileged"
         ];
       };
+
+      systemd.timers.restart-container-tailscale.enable = false; # vpn
 
       systemd.tmpfiles.rules = [
         "d /data/tailscale 0775 1000 data -"

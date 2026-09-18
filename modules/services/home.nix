@@ -1,24 +1,22 @@
-{
-  flake.nixosModules.srv-homeassistant = {config, ...}: let
-    endpoint = config.my.endpoints.home-assistant;
+{self, ...}: {
+  flake.nixosModules.srv-homeassistant = {...}: let
+    inherit (self.lib) endpoint;
+    port = 8123;
   in {
-    my.endpoints.home-assistant = {
-      enable = true;
-      tlsInternal = true;
-      port = 8123;
-      subdomain = "home";
+    imports = [
+      (endpoint {
+        subdomain = "home";
+        inherit port;
+      })
+    ];
+
+    virtualisation.oci-containers.containers.home-assistant = {
+      image = "lscr.io/linuxserver/homeassistant:latest";
+      ports = ["${toString port}:8123"];
+      extraOptions = ["--net=host" "--cap-add=NET_ADMIN" "--cap-add=NET_RAW"];
+      volumes = ["/data/homeassistant:/config" "/run/dbus:/run/dbus:ro" "/proc:/host/proc:ro"];
     };
 
-    my.containers.home-assistant = {
-      enable = true;
-      image = {
-        name = "homeassistant";
-        provider = "lscr";
-      };
-      vols = ["/data/homeassistant:/config" "/run/dbus:/run/dbus:ro" "/proc:/host/proc:ro"];
-      ports = ["${toString endpoint.port}:8123"];
-      extra-options = ["--net=host" "--cap-add=NET_ADMIN" "--cap-add=NET_RAW"];
-    };
     systemd.tmpfiles.rules = ["d /data/homeassistant 0775 1000 data -"];
   };
 }

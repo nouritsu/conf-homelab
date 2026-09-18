@@ -1,26 +1,26 @@
 {self, ...}: {
   flake.nixosModules = {
     srv-enclosed = {config, ...}: let
-      endpoint = config.my.endpoints.enclosed;
+      inherit (self.lib) endpoint;
+      port = 8788;
     in {
-      imports = [self.nixosModules.enclosed-secrets];
-      my.endpoints.enclosed = {
-        enable = true;
-        tunnel = true;
-        port = 8788;
-        subdomain = "share";
+      imports = [
+        self.nixosModules.enclosed-secrets
+        (endpoint {
+          subdomain = "share";
+          tunnel = true;
+          inherit port;
+        })
+      ];
+
+      virtualisation.oci-containers.containers.enclosed = {
+        image = "corentinth/enclosed:latest";
+        ports = ["${toString port}:8787"];
+        environment.PUBLIC_IS_AUTHENTICATION_REQUIRED = "true";
+        environmentFiles = [config.sops.templates."enclosed.env".path];
+        volumes = ["/data/enclosed:/app/.data"];
       };
-      my.containers.enclosed = {
-        enable = true;
-        image = {
-          provider = "official";
-          owner = "corentinth";
-        };
-        ports = ["${toString endpoint.port}:8787"];
-        env.PUBLIC_IS_AUTHENTICATION_REQUIRED = "true";
-        envFile = [config.sops.templates."enclosed.env".path];
-        vols = ["/data/enclosed:/app/.data"];
-      };
+
       systemd.tmpfiles.rules = ["d /data/enclosed 0775 1000 data -"];
     };
 

@@ -1,26 +1,28 @@
-{
-  flake.nixosModules.srv-sabnzbd = {config, ...}: let
-    endpoint = config.my.endpoints.usenet;
+{self, ...}: {
+  flake.nixosModules.srv-sabnzbd = {...}: let
+    inherit (self.lib) endpoint fqdn via-gluetun;
+    port = 8083;
   in {
-    my.endpoints.usenet = {
-      enable = true;
-      tlsInternal = true;
-      port = 8083;
-      subdomain = "usenet";
-    };
-    my.containers.sabnzbd = {
-      enable = true;
-      vpn = true;
-      image.provider = "lscr";
-      ports = ["${toString endpoint.port}:8080"];
-      theme = {
-        enable = true;
-        provider = "ghcr";
-        is-community-theme = true;
-        theme-name = "catppuccin-mocha";
+    imports = [
+      (endpoint {
+        subdomain = "usenet";
+        inherit port;
+      })
+      (via-gluetun "sabnzbd" ["${toString port}:8080"])
+    ];
+
+    virtualisation.oci-containers.containers.sabnzbd = {
+      image = "lscr.io/linuxserver/sabnzbd:latest";
+
+      environment = {
+        DOCKER_MODS = "ghcr.io/themepark-dev/theme.park:sabnzbd";
+        TP_THEME = "catppuccin-mocha";
+        TP_COMMUNITY_THEME = "true";
       };
-      vols = ["/data/sabnzbd:/config" "/media/download:/data"];
+
+      volumes = ["/data/sabnzbd:/config" "/media/download:/data"];
     };
+
     systemd.tmpfiles.rules = [
       "d /data/sabnzbd 0775 1000 data -"
       "d /media/download/usenet 2775 1000 data -"
@@ -28,11 +30,12 @@
       "d /media/download/usenet/incomplete 2775 1000 data -"
       "d /media/download/usenet/complete 2775 1000 data -"
     ];
+
     systemd.services.podman-sabnzbd.preStart = ''
       mkdir -p /data/sabnzbd
 
       config_file="/data/sabnzbd/sabnzbd.ini"
-      whitelist_hosts="${config.my.endpoints.usenet.domain}, localhost, 127.0.0.1"
+      whitelist_hosts="${fqdn "usenet"}, localhost, 127.0.0.1"
 
       if [ -f "$config_file" ]; then
         if grep -q "^host_whitelist" "$config_file"; then

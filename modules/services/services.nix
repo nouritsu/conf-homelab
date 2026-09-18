@@ -1,38 +1,49 @@
 {self, ...}: {
   flake.nixosModules = {
-    caddy = {...}: {
+    caddy = {
+      config,
+      lib,
+      ...
+    }: {
       services.caddy.enable = true;
       networking.firewall.allowedTCPPorts = [80 443];
 
       security.pki.certificateFiles = [
         ../../assets/caddy.crt
       ];
+
+      # two endpoints claiming one domain merge into a single vhost rather than
+      # conflicting, so catch it here
+      assertions =
+        lib.mapAttrsToList (domain: vhost: {
+          assertion = lib.count (lib.hasInfix "reverse_proxy") (lib.splitString "\n" vhost.extraConfig) <= 1;
+          message = "caddy: ${domain} has more than one reverse_proxy - two endpoints claim this domain";
+        })
+        config.services.caddy.virtualHosts;
     };
 
     gluetun = {config, ...}: {
       imports = [self.nixosModules.gluetun-secrets];
-      my.containers.gluetun = {
-        enable = true;
-        restart.enable = false; # vpn
-        image = {
-          owner = "qmcgaw";
-          provider = "official";
-        };
-        env = {
+
+      virtualisation.oci-containers.containers.gluetun = {
+        image = "qmcgaw/gluetun:latest";
+        environment = {
           VPN_SERVICE_PROVIDER = "airvpn";
           VPN_TYPE = "wireguard";
           WIREGUARD_ADDRESSES = "10.168.189.140/32";
           SERVER_COUNTRIES = "Switzerland";
           FIREWALL_VPN_INPUT_PORTS = "59610";
         };
-        envFile = [config.sops.templates."gluetun.env".path];
-        extra-options = [
+        environmentFiles = [config.sops.templates."gluetun.env".path];
+        extraOptions = [
           "--cap-add=NET_ADMIN"
           "--cap-add=NET_RAW"
           "--device=/dev/net/tun:/dev/net/tun"
         ];
         ports = ["8888:8888" "8388:8388" "59610:59610" "59610:59610/udp"];
       };
+
+      systemd.timers.restart-container-gluetun.enable = false; # vpn
     };
 
     gluetun-secrets = {config, ...}: {

@@ -1,24 +1,19 @@
-{
-  flake.nixosModules.srv-grocy = {...}: {
-    my.endpoints.grocy = {
-      enable = true;
-      tlsInternal = true;
-      subdomain = "chores";
-      port = 9283;
-    };
+{self, ...}: {
+  flake.nixosModules.srv-grocy = {...}: let
+    inherit (self.lib) endpoint;
+    port = 9283;
+  in {
+    imports = [
+      (endpoint {
+        subdomain = "chores";
+        inherit port;
+      })
+    ];
 
-    my.containers.grocy = {
-      enable = true;
-
-      image.provider = "lscr";
-
-      vols = [
-        "/data/grocy:/config"
-      ];
-
-      ports = [
-        "9283:80"
-      ];
+    virtualisation.oci-containers.containers.grocy = {
+      image = "lscr.io/linuxserver/grocy:latest";
+      ports = ["${toString port}:80"];
+      volumes = ["/data/grocy:/config"];
     };
 
     systemd.tmpfiles.rules = ["d /data/grocy 0775 1000 data -"];

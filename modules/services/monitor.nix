@@ -1,16 +1,16 @@
 {self, ...}: {
   flake.nixosModules = {
-    srv-beszel = {config, ...}: {
+    srv-beszel = {config, ...}: let
+      inherit (self.lib) endpoint;
+      port = 8090;
+    in {
       imports = [
         self.nixosModules.beszel-secrets
+        (endpoint {
+          subdomain = "monitor";
+          inherit port;
+        })
       ];
-
-      my.endpoints.beszel = {
-        enable = true;
-        tlsInternal = true;
-        port = 8090;
-        subdomain = "monitor";
-      };
 
       services.beszel = {
         hub.enable = true;

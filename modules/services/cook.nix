@@ -1,16 +1,18 @@
-{
-  flake.nixosModules.srv-cook-cli = {config, ...}: let
-    endpoint = config.my.endpoints.cook-cli;
+{self, ...}: {
+  flake.nixosModules.srv-cook-cli = {...}: let
+    inherit (self.lib) endpoint;
+    port = 9080;
   in {
-    my.endpoints.cook-cli = {
-      enable = true;
-      tlsInternal = true;
-      port = 9080;
-      subdomain = "cook";
-    };
+    imports = [
+      (endpoint {
+        subdomain = "cook";
+        inherit port;
+      })
+    ];
+
     services.cook-cli = {
       enable = true;
-      port = endpoint.port;
+      inherit port;
     };
   };
 }

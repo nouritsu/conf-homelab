@@ -1,21 +1,23 @@
 {self, ...}: {
   flake.nixosModules = {
     srv-paperless = {config, ...}: let
-      endpoint = config.my.endpoints.paperless;
+      inherit (self.lib) endpoint fqdn;
+      port = 28981;
     in {
-      imports = [self.nixosModules.paperless-secrets];
-      my.endpoints.paperless = {
-        enable = true;
-        tlsInternal = true;
-        port = 28981;
-        subdomain = "docs";
-      };
+      imports = [
+        self.nixosModules.paperless-secrets
+        (endpoint {
+          subdomain = "docs";
+          inherit port;
+        })
+      ];
+
       services.gotenberg.port = 3001;
       services.paperless = {
         enable = true;
         consumptionDirIsPublic = true;
-        port = endpoint.port;
-        domain = endpoint.domain;
+        inherit port;
+        domain = fqdn "docs";
         passwordFile = config.sops.secrets."paperless/admin-password".path;
         configureTika = true;
         settings = {

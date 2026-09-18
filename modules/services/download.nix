@@ -1,48 +1,39 @@
 {self, ...}: {
   flake.nixosModules = {
     srv-aria2 = {config, ...}: let
-      endpoint = config.my.endpoints.download;
+      inherit (self.lib) endpoint via-gluetun;
+      web-port = 6880;
+      rpc-port = 6800;
     in {
-      imports = [self.nixosModules.aria2-secrets];
-      my.endpoints.download = {
-        enable = true;
-        tlsInternal = true;
-        port = 6880;
-        subdomain = "download";
-      };
-      my.endpoints.aria2 = {
-        enable = true;
-        tlsInternal = true;
-        port = 6800;
-        subdomain = "aria2";
-      };
-      my.containers.aria2-pro = {
-        enable = true;
-        vpn = true;
-        image = {
-          provider = "official";
-          owner = "p3terx";
-          name = "aria2-pro";
-        };
-        ports = ["6800:6800"];
-        env = {
+      imports = [
+        self.nixosModules.aria2-secrets
+        (endpoint {
+          subdomain = "download";
+          port = web-port;
+        })
+        (endpoint {
+          subdomain = "aria2";
+          port = rpc-port;
+        })
+        (via-gluetun "aria2-pro" ["${toString rpc-port}:6800"])
+      ];
+
+      virtualisation.oci-containers.containers.aria2-pro = {
+        image = "p3terx/aria2-pro:latest";
+        environment = {
           PUID = "1000";
           PGID = "1000";
           UPDATE_TRACKERS = "false";
         };
-        envFile = [config.sops.templates."aria2.env".path];
-        vols = ["/data/ariang/config:/config" "/media/download/aria2:/downloads"];
-        extra-options = ["--log-driver=json-file" "--log-opt=max-size=1m"];
+        environmentFiles = [config.sops.templates."aria2.env".path];
+        volumes = ["/data/ariang/config:/config" "/media/download/aria2:/downloads"];
+        extraOptions = ["--log-driver=json-file" "--log-opt=max-size=1m"];
       };
-      my.containers.ariang = {
-        enable = true;
-        image = {
-          provider = "official";
-          owner = "p3terx";
-          name = "ariang";
-        };
-        ports = ["${toString endpoint.port}:6880"];
-        extra-options = ["--log-driver=json-file" "--log-opt=max-size=1m"];
+
+      virtualisation.oci-containers.containers.ariang = {
+        image = "p3terx/ariang:latest";
+        ports = ["${toString web-port}:6880"];
+        extraOptions = ["--log-driver=json-file" "--log-opt=max-size=1m"];
       };
       systemd.tmpfiles.rules = [
         "d /data/ariang 0775 1000 data -"

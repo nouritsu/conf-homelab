@@ -1,23 +1,25 @@
 {self, ...}: {
   flake.nixosModules = {
     srv-vaultwarden = {config, ...}: let
-      endpoint = config.my.endpoints.vaultwarden;
+      inherit (self.lib) endpoint fqdn;
+      port = 8087;
     in {
-      imports = [self.nixosModules.vaultwarden-secrets];
-      my.endpoints.vaultwarden = {
-        enable = true;
-        tlsInternal = true;
-        port = 8087;
-        subdomain = "vault";
-      };
+      imports = [
+        self.nixosModules.vaultwarden-secrets
+        (endpoint {
+          subdomain = "vault";
+          inherit port;
+        })
+      ];
+
       services.vaultwarden = {
         enable = true;
         environmentFile = config.sops.templates."vaultwarden.env".path;
         config = {
-          DOMAIN = "https://${endpoint.domain}";
+          DOMAIN = "https://${fqdn "vault"}";
           SIGNUPS_ALLOWED = false;
           ROCKET_ADDRESS = "127.0.0.1";
-          ROCKET_PORT = endpoint.port;
+          ROCKET_PORT = port;
         };
       };
     };

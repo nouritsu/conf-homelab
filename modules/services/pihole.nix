@@ -1,17 +1,17 @@
-{...}: {
-  flake.nixosModules.srv-pihole = {
-    pkgs,
-    config,
-    ...
-  }: let
+{self, ...}: {
+  flake.nixosModules.srv-pihole = {pkgs, ...}: let
+    inherit (self.lib) endpoint host-ip;
+    port = 8081;
+
     TWELVE_HOURS_SECONDS = 43200;
   in {
-    my.endpoints.pihole = {
-      enable = true;
-      tlsInternal = true;
-      port = 8081;
-      subdomain = "pihole";
-    };
+    imports = [
+      (endpoint {
+        subdomain = "pihole";
+        inherit port;
+      })
+    ];
+
     environment.systemPackages = [pkgs.pihole-ftl];
     networking = {
       useDHCP = false;
@@ -40,14 +40,14 @@
       ];
       settings = {
         dns = {
-          bind_hosts = ["192.168.178.128" "127.0.0.1"];
+          bind_hosts = [host-ip "127.0.0.1"];
           interface = "end0";
           upstreams = ["1.1.1.1" "1.0.0.1"];
           domainNeeded = true;
           expandHosts = true;
           hosts = [
             "192.168.178.1   gateway"
-            "192.168.178.128   pihole"
+            "${host-ip}   pihole"
           ];
         };
         dhcp.active = false;
@@ -68,7 +68,7 @@
     };
     services.pihole-web = {
       enable = true;
-      ports = [config.my.endpoints.pihole.port];
+      ports = [port];
     };
   };
 }

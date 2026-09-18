@@ -1,23 +1,22 @@
-{
-  flake.nixosModules.srv-jellyfin = {config, ...}: let
-    endpoint = config.my.endpoints.jellyfin;
+{self, ...}: {
+  flake.nixosModules.srv-jellyfin = {...}: let
+    inherit (self.lib) endpoint;
+    port = 8096;
   in {
-    my.endpoints.jellyfin = {
-      enable = true;
-      tlsInternal = true;
-      port = 8096;
-      subdomain = "player";
+    imports = [
+      (endpoint {
+        subdomain = "player";
+        inherit port;
+      })
+    ];
+
+    virtualisation.oci-containers.containers.jellyfin = {
+      image = "lscr.io/linuxserver/jellyfin:latest";
+      ports = ["${toString port}:8096"];
+      extraOptions = ["--device=/dev/dri:/dev/dri"];
+      volumes = ["/data/jellyfin:/config" "/media/media:/media:ro"];
     };
-    my.containers.jellyfin = {
-      enable = true;
-      ports = ["${toString endpoint.port}:8096"];
-      dri-passthrough = true;
-      image = {
-        name = "jellyfin";
-        provider = "lscr";
-      };
-      vols = ["/data/jellyfin:/config" "/media/media:/media:ro"];
-    };
+
     systemd.tmpfiles.rules = ["d /data/jellyfin 0775 1000 data -"];
   };
 }

@@ -1,43 +1,45 @@
 {self, ...}: {
   flake.nixosModules = {
     srv-documenso = {config, ...}: let
-      endpoint = config.my.endpoints.documenso;
+      inherit (self.lib) endpoint fqdn;
+      domain = fqdn "sign";
+      port = 3000;
+
       smtp-host = "smtp.hostinger.com";
       smtp-port = 465;
     in {
       imports = [
         self.nixosModules.documenso-secrets
         self.nixosModules.documenso-db
+        (endpoint {
+          subdomain = "sign";
+          tunnel = true;
+          inherit port;
+        })
       ];
-      my.endpoints.documenso = {
-        enable = true;
-        tunnel = true;
-        port = 3000;
-        subdomain = "sign";
-      };
-      my.containers.documenso = {
-        enable = true;
-        image.provider = "official";
-        ports = ["3000:3000"];
-        env = {
+
+      virtualisation.oci-containers.containers.documenso = {
+        image = "documenso/documenso:latest";
+        dependsOn = ["documenso-db"];
+        ports = ["${toString port}:3000"];
+        environment = {
           NEXT_PRIVATE_SMTP_HOST = smtp-host;
           NEXT_PRIVATE_SMTP_PORT = toString smtp-port;
           NEXT_PRIVATE_SMTP_SECURE = "true";
-          PORT = "3000";
-          NEXTAUTH_URL = "https://sign.nouritsu.com";
-          NEXT_PUBLIC_WEBAPP_URL = "https://sign.nouritsu.com";
-          NEXT_PRIVATE_INTERNAL_WEBAPP_URL = "http://localhost:3000";
+          PORT = toString port;
+          NEXTAUTH_URL = "https://${domain}";
+          NEXT_PUBLIC_WEBAPP_URL = "https://${domain}";
+          NEXT_PRIVATE_INTERNAL_WEBAPP_URL = "http://localhost:${toString port}";
           NEXT_PRIVATE_SMTP_TRANSPORT = "smtp-auth";
           NEXT_PRIVATE_SMTP_FROM_NAME = "Documenso";
           NEXT_PRIVATE_SIGNING_LOCAL_FILE_PATH = "/opt/documenso/cert.p12";
           NEXT_PUBLIC_DISABLE_SIGNUP = "true";
           DOCUMENSO_DISABLE_TELEMETRY = "true";
         };
-        envFile = [config.sops.templates."documenso.env".path];
-        vols = ["${config.sops.secrets."documenso-cert".path}:/opt/documenso/cert.p12:ro"];
-        extra-options = ["--add-host=documenso-db:host-gateway"];
+        environmentFiles = [config.sops.templates."documenso.env".path];
+        volumes = ["${config.sops.secrets."documenso-cert".path}:/opt/documenso/cert.p12:ro"];
+        extraOptions = ["--add-host=documenso-db:host-gateway"];
       };
-      virtualisation.oci-containers.containers.documenso.dependsOn = ["documenso-db"];
     };
 
     documenso-secrets = {config, ...}: {
@@ -65,24 +67,25 @@
 
     documenso-db = {config, ...}: {
       imports = [self.nixosModules.documenso-db-secrets];
-      my.containers.documenso-db = {
-        enable = true;
-        restart.enable = false; # database
-        image.url = "postgres:15";
-        env = {
+
+      virtualisation.oci-containers.containers.documenso-db = {
+        image = "postgres:15";
+        environment = {
           POSTGRES_USER = "documenso";
           POSTGRES_DB = "documenso";
         };
-        envFile = [config.sops.templates."documenso-postgres.env".path];
-        vols = ["documenso-db:/var/lib/postgresql/data"];
+        environmentFiles = [config.sops.templates."documenso-postgres.env".path];
+        volumes = ["documenso-db:/var/lib/postgresql/data"];
         ports = ["5433:5432"];
-        extra-options = [
+        extraOptions = [
           "--health-cmd=pg_isready -U documenso"
           "--health-interval=10s"
           "--health-timeout=5s"
           "--health-retries=5"
         ];
       };
+
+      systemd.timers.restart-container-documenso-db.enable = false; # database
     };
 
     documenso-db-secrets = {config, ...}: {

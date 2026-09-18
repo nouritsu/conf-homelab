@@ -1,42 +1,42 @@
 {self, ...}: {
   flake.nixosModules = {
     srv-wg-easy = {config, ...}: let
+      inherit (self.lib) endpoint host-ip;
+      port = 51821;
+
       wg-port = 51820;
       data-dir = "/data/wg-easy";
-      endpoint = config.my.endpoints.wg-easy;
     in {
-      imports = [self.nixosModules.wg-easy-secrets];
-      my.endpoints.wg-easy = {
-        enable = true;
-        tlsInternal = true;
-        port = 51821;
-        subdomain = "vpn";
-      };
-      my.containers.wg-easy = {
-        enable = true;
-        restart.enable = false; # vpn
-        image = {
-          tag = "15";
-          provider = "ghcr";
-        };
-        env = {
+      imports = [
+        self.nixosModules.wg-easy-secrets
+        (endpoint {
+          subdomain = "vpn";
+          inherit port;
+        })
+      ];
+
+      virtualisation.oci-containers.containers.wg-easy = {
+        image = "ghcr.io/wg-easy/wg-easy:15";
+        environment = {
           INIT_ENABLED = "true";
           INIT_USERNAME = "admin";
-          INIT_DNS = "192.168.178.128,1.1.1.1";
+          INIT_DNS = "${host-ip},1.1.1.1";
           WG_POST_UP = "";
           WG_POST_DOWN = "";
         };
-        envFile = [config.sops.templates."wg-easy.env".path];
-        vols = [
+        environmentFiles = [config.sops.templates."wg-easy.env".path];
+        volumes = [
           "${data-dir}:/etc/wireguard"
           "/run/booted-system/kernel-modules/lib/modules:/lib/modules:ro"
         ];
-        extra-options = ["--privileged" "--network=host"];
+        extraOptions = ["--privileged" "--network=host"];
         ports = [
           "${toString wg-port}:51820/udp"
-          "${toString endpoint.port}:51821/tcp"
+          "${toString port}:51821/tcp"
         ];
       };
+
+      systemd.timers.restart-container-wg-easy.enable = false; # vpn
       boot.kernel.sysctl = {
         "net.ipv4.ip_forward" = 1;
         "net.ipv4.conf.all.src_valid_mark" = 1;

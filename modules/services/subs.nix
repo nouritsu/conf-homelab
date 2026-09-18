@@ -1,20 +1,19 @@
-{
-  flake.nixosModules.srv-bazarr = {config, ...}: let
-    endpoint = config.my.endpoints.bazarr;
+{self, ...}: {
+  flake.nixosModules.srv-bazarr = {...}: let
+    inherit (self.lib) endpoint via-gluetun;
+    port = 8088;
   in {
-    my.endpoints.bazarr = {
-      enable = true;
-      tlsInternal = true;
-      port = 8088;
-      subdomain = "subs";
-    };
+    imports = [
+      (endpoint {
+        subdomain = "subs";
+        inherit port;
+      })
+      (via-gluetun "bazarr" ["${toString port}:6767"])
+    ];
 
-    my.containers.bazarr = {
-      enable = true;
-      vpn = true;
-      image.provider = "lscr";
-      ports = ["${toString endpoint.port}:6767"];
-      vols = ["/data/bazarr:/config" "/media/media:/media"];
+    virtualisation.oci-containers.containers.bazarr = {
+      image = "lscr.io/linuxserver/bazarr:latest";
+      volumes = ["/data/bazarr:/config" "/media/media:/media"];
     };
 
     systemd.tmpfiles.rules = ["d /data/bazarr 0775 1000 data -"];

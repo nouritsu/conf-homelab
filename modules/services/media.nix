@@ -1,11 +1,14 @@
-{
-  flake.nixosModules.srv-jellyseerr = {...}: {
-    my.endpoints.jellyseerr = {
-      enable = true;
-      tlsInternal = true;
-      port = 5055;
-      subdomain = "media";
-    };
+{self, ...}: {
+  flake.nixosModules.srv-jellyseerr = {...}: let
+    inherit (self.lib) endpoint;
+  in {
+    imports = [
+      (endpoint {
+        subdomain = "media";
+        port = 5055;
+      })
+    ];
+
     services.jellyseerr.enable = true;
   };
 }

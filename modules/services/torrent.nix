@@ -1,35 +1,30 @@
-{
+{self, ...}: {
   flake.nixosModules = {
-    srv-qbittorrent = {config, ...}: let
-      endpoint = config.my.endpoints.torrent;
+    srv-qbittorrent = {...}: let
+      inherit (self.lib) endpoint via-gluetun;
+      port = 8082;
     in {
-      my.endpoints.torrent = {
-        enable = true;
-        tlsInternal = true;
-        port = 8082;
-        subdomain = "torrent";
-      };
+      imports = [
+        (endpoint {
+          subdomain = "torrent";
+          inherit port;
+        })
+        (via-gluetun "qbittorrent" ["${toString port}:8081"])
+      ];
 
-      my.containers.qbittorrent = {
-        enable = true;
-        vpn = true;
-        image.provider = "lscr";
-        ports = ["${toString endpoint.port}:8081"];
+      virtualisation.oci-containers.containers.qbittorrent = {
+        image = "lscr.io/linuxserver/qbittorrent:latest";
 
-        env = {
+        environment = {
           WEBUI_PORT = "8081";
           TORRENTING_PORT = "59610";
+
+          DOCKER_MODS = "ghcr.io/themepark-dev/theme.park:vuetorrent";
+          TP_THEME = "catppuccin-mocha";
+          TP_COMMUNITY_THEME = "true";
         };
 
-        theme = {
-          enable = true;
-          provider = "ghcr";
-          name = "vuetorrent";
-          is-community-theme = true;
-          theme-name = "catppuccin-mocha";
-        };
-
-        vols = ["/data/qbittorrent:/config" "/media/download:/data"];
+        volumes = ["/data/qbittorrent:/config" "/media/download:/data"];
       };
 
       systemd.tmpfiles.rules = [
@@ -44,26 +39,21 @@
       ];
     };
 
-    srv-mousehole = {config, ...}: let
-      endpoint = config.my.endpoints.mousehole;
+    srv-mousehole = {...}: let
+      inherit (self.lib) endpoint via-gluetun;
+      port = 5010;
     in {
-      my.endpoints.mousehole = {
-        enable = true;
-        tlsInternal = true;
-        port = 5010;
-        subdomain = "mam";
-      };
+      imports = [
+        (endpoint {
+          subdomain = "mam";
+          inherit port;
+        })
+        (via-gluetun "mousehole" ["${toString port}:5010"])
+      ];
 
-      my.containers.mousehole = {
-        enable = true;
-        vpn = true;
-        image = {
-          provider = "official";
-          owner = "tmmrtn";
-          name = "mousehole";
-        };
-        ports = ["${toString endpoint.port}:5010"];
-        vols = ["/data/mousehole:/srv/mousehole"];
+      virtualisation.oci-containers.containers.mousehole = {
+        image = "tmmrtn/mousehole:latest";
+        volumes = ["/data/mousehole:/srv/mousehole"];
       };
 
       systemd.tmpfiles.rules = [

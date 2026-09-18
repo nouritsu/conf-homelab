@@ -13,8 +13,6 @@
       homelab-system
       homelab-disko
       secrets
-      opts-endpoints
-      opts-containers
 
       # system
       graphics
@@ -27,6 +25,7 @@
       fs-btrfs
       user-aneesh
       virt-podman
+      containers
 
       # ssh
       ssh-base
@@ -42,7 +41,7 @@
       app-core
       app-fish
       app-nh
-      app-kodi
+      # app-kodi
 
       # infrastructure
       caddy
@@ -52,24 +51,16 @@
 
       # services
       srv-openrgb
-      srv-grocy
       srv-beszel
       srv-copyparty
-      # srv-donetick
       srv-bookshelf
       srv-bazarr
-      srv-cook-cli
       srv-scrutiny
       srv-paperless
-      srv-aria2
       srv-homeassistant
       srv-prowlarr
       srv-tailscale
-      # srv-roundcube
-      # srv-jellyseerr
-      # srv-uptime-kuma
       srv-radarr
-      # srv-immich
       srv-pihole
       srv-jellyfin
       srv-enclosed
@@ -79,7 +70,6 @@
       srv-qbittorrent
       srv-mousehole
       srv-sabnzbd
-      srv-vaultwarden
     ];
   };
 
@@ -96,9 +86,9 @@
         ];
 
       networking.hostName = "homelab";
-      networking.domain = "nouritsu.com";
+      networking.domain = self.lib.base-domain;
 
-      boot.loader.raspberryPi.bootloader = "kernel";
+      boot.loader.raspberry-pi.bootloader = "kernel";
       environment.systemPackages = [pkgs.raspberrypi-eeprom];
 
       # ================================================================ #
