@@ -1,9 +1,5 @@
-{
-  den.aspects.secrets.nixos = {
-    pkgs,
-    inputs,
-    ...
-  }: {
+{inputs, ...}: {
+  den.aspects.secrets.nixos = {pkgs, ...}: {
     imports = [
       inputs.sops-nix.nixosModules.sops
     ];
