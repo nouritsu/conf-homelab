@@ -1,24 +1,18 @@
 # A second host that selects every service aspect, including the ones the real
 # homelab does not run. Without it those aspects are never type-checked: den
 # only evaluates what a host selects, so a broken deselected service would stay
-# invisible until the day it is switched on. Every aspect in the tree is
-# reachable from here.
+# invisible until the day it is switched on.
+#
+# services._ is den's own aggregate over the namespace - it expands to every
+# immediate child of den.aspects.services - so a service is covered here from
+# the moment it is defined, with no list to remember to update.
 #
 #   nix eval .#nixosConfigurations.check-all.config.system.build.toplevel.drvPath
 {den, ...}: {
   den.aspects.check-all = {
     includes = with den.aspects; [
       homelab
-
-      services.jellyseerr
-      services.cook-cli
-      services.uptime-kuma
-      services.grocy
-      services.roundcube
-      services.vaultwarden
-      services.aria2
-      services.immich
-      services.wg-easy
+      services._
     ];
 
     # services.wg-easy and services.tailscale collide on this sysctl; the
