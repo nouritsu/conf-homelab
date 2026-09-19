@@ -62,11 +62,7 @@ in {
           };
           dhcp.active = false;
           webserver = {
-            api = {
-              /*
-              TODO: add passwords
-              */
-            };
+            # TODO: add api passwords
             session.timeout = TWELVE_HOURS_SECONDS;
           };
           ntp = {

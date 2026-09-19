@@ -33,11 +33,9 @@ in {
           "${data-dir}:/etc/wireguard"
           "/run/booted-system/kernel-modules/lib/modules:/lib/modules:ro"
         ];
+        # no ports: --network=host publishes nothing, podman discards them.
+        # The firewall rule below is what actually opens the wireguard port.
         extraOptions = ["--privileged" "--network=host"];
-        ports = [
-          "${toString wg-port}:51820/udp"
-          "${toString port}:51821/tcp"
-        ];
       };
 
       systemd.timers.restart-container-wg-easy.enable = false; # vpn
