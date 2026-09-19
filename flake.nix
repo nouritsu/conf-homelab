@@ -7,8 +7,18 @@
     flake-parts.url = "github:hercules-ci/flake-parts";
     import-tree.url = "github:vic/import-tree";
     den.url = "github:denful/den";
-    disko.url = "github:nix-community/disko";
-    sops-nix.url = "github:Mic92/sops-nix";
+
+    # nixos-raspberrypi pins the nixpkgs that actually builds the system; these
+    # two only expose plain NixOS modules, which take pkgs from the host, so
+    # their own nixpkgs was dead weight in the lock.
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs @ {
