@@ -5,7 +5,7 @@
   wg-port = 51820;
   data-dir = "/data/wg-easy";
 in {
-  den.aspects.srv-wg-easy = {
+  den.aspects.services.wg-easy = {
     endpoint = {
       subdomain = "vpn";
       inherit port;

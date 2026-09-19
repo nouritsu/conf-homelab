@@ -2,7 +2,7 @@
   web-port = 6880;
   rpc-port = 6800;
 in {
-  den.aspects.srv-aria2 = {
+  den.aspects.services.aria2 = {
     # two endpoints: the web ui is published directly, the rpc port through gluetun
     endpoint = [
       {

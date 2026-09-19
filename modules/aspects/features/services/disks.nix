@@ -1,5 +1,5 @@
 {
-  den.aspects.srv-scrutiny = let
+  den.aspects.services.scrutiny = let
     port = 8180;
 
     root = "/dev/nvme0n1";

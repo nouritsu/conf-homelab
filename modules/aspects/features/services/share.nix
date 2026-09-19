@@ -1,5 +1,5 @@
 {
-  den.aspects.srv-enclosed = let
+  den.aspects.services.enclosed = let
     port = 8788;
   in {
     endpoint = {

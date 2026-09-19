@@ -2,8 +2,8 @@
   qbit-port = 8082;
   mam-port = 5010;
 in {
-  den.aspects = {
-    srv-qbittorrent = {
+  den.aspects.services = {
+    qbittorrent = {
       endpoint = {
         subdomain = "torrent";
         port = qbit-port;
@@ -41,7 +41,7 @@ in {
       };
     };
 
-    srv-mousehole = {
+    mousehole = {
       endpoint = {
         subdomain = "mam";
         port = mam-port;

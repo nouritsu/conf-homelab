@@ -1,5 +1,5 @@
 {
-  den.aspects.app-fish.nixos = {pkgs, ...}: {
+  den.aspects.apps.fish.nixos = {pkgs, ...}: {
     users.defaultUserShell = pkgs.fish;
 
     environment.systemPackages = with pkgs.fishPlugins; [

@@ -1,5 +1,5 @@
 {
-  den.aspects.srv-uptime-kuma = let
+  den.aspects.services.uptime-kuma = let
     port = 4000;
   in {
     endpoint = {

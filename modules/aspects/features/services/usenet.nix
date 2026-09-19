@@ -1,7 +1,7 @@
 {den, ...}: let
   port = 8083;
 in {
-  den.aspects.srv-sabnzbd = {
+  den.aspects.services.sabnzbd = {
     endpoint = {
       subdomain = "usenet";
       inherit port;

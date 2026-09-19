@@ -1,22 +1,22 @@
 # Anything I would want on a machine of mine, headless or not.
 {den, ...}: {
   den.aspects.base.includes = with den.aspects; [
-    locale
-    auto-tz
+    i18n
+    i18n.tz-automatic
     network
 
-    nix-base
-    nix-cache
+    nix
+    nix.cache
 
-    ssh-base
-    ssh-from-pc
-    ssh-from-phone
+    ssh
+    ssh.from-pc
+    ssh.from-phone
 
-    app-core
-    app-fish
-    app-nh
+    apps.core
+    apps.fish
+    apps.nh
 
-    user-aneesh
+    aneesh
     secrets
   ];
 }

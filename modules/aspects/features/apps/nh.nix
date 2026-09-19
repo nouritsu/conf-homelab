@@ -1,5 +1,5 @@
 {
-  den.aspects.app-nh.nixos = {
+  den.aspects.apps.nh.nixos = {
     programs.nh = {
       enable = true;
       flake = "/home/aneesh/.config/nixos";

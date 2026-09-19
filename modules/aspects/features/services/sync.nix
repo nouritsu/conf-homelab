@@ -1,5 +1,5 @@
 {
-  den.aspects.srv-syncthing = let
+  den.aspects.services.syncthing = let
     port = 8384;
   in {
     endpoint = {

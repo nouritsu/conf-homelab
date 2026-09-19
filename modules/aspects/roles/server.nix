@@ -4,10 +4,10 @@
   den.aspects.server.includes = with den.aspects; [
     base
 
-    fs-xfs
-    fs-btrfs
+    filesystem.xfs
+    filesystem.btrfs
 
-    virt-podman
+    virtualization.podman
     containers
 
     caddy

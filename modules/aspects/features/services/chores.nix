@@ -1,5 +1,5 @@
 {
-  den.aspects.srv-grocy = let
+  den.aspects.services.grocy = let
     port = 9283;
   in {
     endpoint = {

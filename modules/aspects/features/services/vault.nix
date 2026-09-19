@@ -1,7 +1,7 @@
 {den, ...}: let
   port = 8087;
 in {
-  den.aspects.srv-vaultwarden = {
+  den.aspects.services.vaultwarden = {
     endpoint = {
       subdomain = "vault";
       inherit port;

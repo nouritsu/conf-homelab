@@ -1,5 +1,5 @@
 {
-  den.aspects.srv-copyparty = let
+  den.aspects.services.copyparty = let
     port = 3923;
   in {
     endpoint = {

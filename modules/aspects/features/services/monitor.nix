@@ -1,5 +1,5 @@
 {
-  den.aspects.srv-beszel = let
+  den.aspects.services.beszel = let
     port = 8090;
   in {
     endpoint = {

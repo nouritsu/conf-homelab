@@ -1,5 +1,5 @@
 {
-  den.aspects.srv-jellyfin = let
+  den.aspects.services.jellyfin = let
     port = 8096;
   in {
     endpoint = {

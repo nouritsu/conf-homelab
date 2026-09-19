@@ -1,7 +1,7 @@
 {den, ...}: let
   inherit (den.lib.homelab) fqdn lan-cidr;
 in {
-  den.aspects.srv-tailscale.nixos = {config, ...}: {
+  den.aspects.services.tailscale.nixos = {config, ...}: {
     sops.secrets."tailscale/authkey" = {};
 
     sops.templates."tailscale.env" = {

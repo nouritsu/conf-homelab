@@ -1,5 +1,5 @@
 {
-  den.aspects.srv-immich = let
+  den.aspects.services.immich = let
     port = 2283;
   in {
     endpoint = {

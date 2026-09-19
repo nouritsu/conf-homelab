@@ -1,6 +1,6 @@
 {
-  den.aspects = {
-    ssh-base.nixos = {
+  den.aspects.ssh = {
+    nixos = {
       services.openssh = {
         enable = true;
         openFirewall = true;
@@ -13,7 +13,7 @@
       };
     };
 
-    ssh-from-pc.nixos = {
+    from-pc.nixos = {
       users.users.aneesh.openssh.authorizedKeys.keys = [
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAwVvRZ6cNb1mSXehYaqGtX5EkdSb9IqKzdsXPepddhY aneesh@pc"
       ];
@@ -23,7 +23,7 @@
       ];
     };
 
-    ssh-from-phone.nixos = {
+    from-phone.nixos = {
       users.users.aneesh.openssh.authorizedKeys.keys = [
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGqz5wN1kPxbkBLyr+g1ButtOA7pY6t1OKxu5e6681cg aneesh@phone"
       ];

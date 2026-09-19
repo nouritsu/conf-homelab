@@ -1,5 +1,5 @@
 {
-  den.aspects.srv-cook-cli = let
+  den.aspects.services.cook-cli = let
     port = 9080;
   in {
     endpoint = {

@@ -1,7 +1,7 @@
 {den, ...}: let
   port = 8088;
 in {
-  den.aspects.srv-bazarr = {
+  den.aspects.services.bazarr = {
     endpoint = {
       subdomain = "subs";
       inherit port;

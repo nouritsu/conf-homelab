@@ -1,12 +1,12 @@
 {
-  den.aspects = {
-    nix-base.nixos = {
+  den.aspects.nix = {
+    nixos = {
       programs.nix-ld.enable = true;
       nix.settings.trusted-users = ["root" "@wheel"];
       nix.settings.experimental-features = ["nix-command" "flakes"];
     };
 
-    nix-cache.nixos = {
+    cache.nixos = {
       nix.settings = {
         substituters = [
           "https://cache.nixos.org"

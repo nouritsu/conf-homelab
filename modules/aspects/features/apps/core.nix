@@ -1,5 +1,5 @@
 {
-  den.aspects.app-core.nixos = {pkgs, ...}: {
+  den.aspects.apps.core.nixos = {pkgs, ...}: {
     environment.systemPackages = [
       pkgs.git
       pkgs.helix

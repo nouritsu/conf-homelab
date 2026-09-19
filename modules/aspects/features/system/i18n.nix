@@ -1,10 +1,6 @@
 {
-  den.aspects = {
-    auto-tz.nixos = {
-      services.automatic-timezoned.enable = true;
-    };
-
-    locale.nixos = {
+  den.aspects.i18n = {
+    nixos = {
       i18n = {
         defaultLocale = "en_GB.UTF-8";
         extraLocaleSettings = {
@@ -19,6 +15,10 @@
           LC_TIME = "de_DE.UTF-8";
         };
       };
+    };
+
+    tz-automatic.nixos = {
+      services.automatic-timezoned.enable = true;
     };
   };
 }

@@ -1,7 +1,7 @@
 {den, ...}: let
   port = 8085;
 in {
-  den.aspects.srv-radarr = {
+  den.aspects.services.radarr = {
     endpoint = {
       subdomain = "movies";
       inherit port;

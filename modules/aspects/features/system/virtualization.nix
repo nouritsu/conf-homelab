@@ -1,5 +1,5 @@
 {
-  den.aspects.virt-podman.nixos = {pkgs, ...}: {
+  den.aspects.virtualization.podman.nixos = {pkgs, ...}: {
     virtualisation.podman = {
       enable = true;
       dockerCompat = true;

@@ -1,7 +1,7 @@
 {den, ...}: let
   port = 28981;
 in {
-  den.aspects.srv-paperless = {
+  den.aspects.services.paperless = {
     endpoint = {
       subdomain = "docs";
       inherit port;

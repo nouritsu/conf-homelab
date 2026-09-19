@@ -1,5 +1,5 @@
 {
-  den.aspects.srv-jellyseerr = {
+  den.aspects.services.jellyseerr = {
     endpoint = {
       subdomain = "media";
       port = 5055;

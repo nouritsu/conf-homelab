@@ -1,7 +1,7 @@
 {den, ...}: let
   port = 8081;
 in {
-  den.aspects.srv-pihole = {
+  den.aspects.services.pihole = {
     endpoint = {
       subdomain = "pihole";
       inherit port;

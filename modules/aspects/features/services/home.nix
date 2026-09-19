@@ -1,5 +1,5 @@
 {
-  den.aspects.srv-homeassistant = let
+  den.aspects.services.homeassistant = let
     port = 8123;
   in {
     endpoint = {

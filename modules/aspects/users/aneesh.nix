@@ -1,5 +1,5 @@
 {
-  den.aspects.user-aneesh.nixos = {
+  den.aspects.aneesh.nixos = {
     users.users.aneesh = {
       isNormalUser = true;
       extraGroups = ["wheel" "networkmanager" "data"];

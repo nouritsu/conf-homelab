@@ -1,5 +1,5 @@
 {
-  den.aspects.srv-openrgb.nixos = {
+  den.aspects.services.openrgb.nixos = {
     pkgs,
     lib,
     ...

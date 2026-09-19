@@ -4,7 +4,7 @@
   domain = den.lib.homelab.fqdn "mail";
   port = 8001;
 in {
-  den.aspects.srv-roundcube = {
+  den.aspects.services.roundcube = {
     endpoint = {
       subdomain = "mail";
       inherit port;

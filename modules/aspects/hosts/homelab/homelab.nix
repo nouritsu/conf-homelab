@@ -12,29 +12,29 @@
         # hardware
         graphics
         storage
-        homelab-disko
+        homelab.disko
 
         # services
-        srv-openrgb
-        srv-beszel
-        srv-copyparty
-        srv-bookshelf
-        srv-bazarr
-        srv-scrutiny
-        srv-paperless
-        srv-homeassistant
-        srv-prowlarr
-        srv-tailscale
-        srv-radarr
-        srv-pihole
-        srv-jellyfin
-        srv-enclosed
-        srv-sonarr
-        srv-documenso
-        srv-syncthing
-        srv-qbittorrent
-        srv-mousehole
-        srv-sabnzbd
+        services.openrgb
+        services.beszel
+        services.copyparty
+        services.bookshelf
+        services.bazarr
+        services.scrutiny
+        services.paperless
+        services.homeassistant
+        services.prowlarr
+        services.tailscale
+        services.radarr
+        services.pihole
+        services.jellyfin
+        services.enclosed
+        services.sonarr
+        services.documenso
+        services.syncthing
+        services.qbittorrent
+        services.mousehole
+        services.sabnzbd
       ]);
 
     nixos = {pkgs, ...}: {

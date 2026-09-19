@@ -1,7 +1,7 @@
 {den, ...}: let
   port = 8787;
 in {
-  den.aspects.srv-bookshelf = {
+  den.aspects.services.bookshelf = {
     endpoint = {
       subdomain = "books";
       inherit port;

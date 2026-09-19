@@ -4,7 +4,7 @@
   domain = den.lib.homelab.fqdn "sign";
   port = 3000;
 in {
-  den.aspects.srv-documenso = {
+  den.aspects.services.documenso = {
     endpoint = {
       subdomain = "sign";
       tunnel = true;

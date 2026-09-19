@@ -1,7 +1,7 @@
 {den, ...}: let
   port = 8084;
 in {
-  den.aspects.srv-prowlarr = {
+  den.aspects.services.prowlarr = {
     endpoint = {
       subdomain = "indexes";
       inherit port;

@@ -1,7 +1,7 @@
 {den, ...}: let
   port = 8086;
 in {
-  den.aspects.srv-sonarr = {
+  den.aspects.services.sonarr = {
     endpoint = {
       subdomain = "shows";
       inherit port;
