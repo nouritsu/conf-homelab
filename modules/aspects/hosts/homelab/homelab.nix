@@ -4,38 +4,36 @@
   ...
 }: {
   den.aspects.homelab = {
-    includes =
-      [den.batteries.hostname]
-      ++ (with den.aspects; [
-        server
+    includes = with den.aspects; [
+      server
 
-        # hardware
-        graphics
-        storage
-        homelab.disko
+      # hardware
+      graphics
+      storage
+      homelab.disko
 
-        # services
-        services.openrgb
-        services.beszel
-        services.copyparty
-        services.bookshelf
-        services.bazarr
-        services.scrutiny
-        services.paperless
-        services.homeassistant
-        services.prowlarr
-        services.tailscale
-        services.radarr
-        services.pihole
-        services.jellyfin
-        services.enclosed
-        services.sonarr
-        services.documenso
-        services.syncthing
-        services.qbittorrent
-        services.mousehole
-        services.sabnzbd
-      ]);
+      # services
+      services.openrgb
+      services.beszel
+      services.copyparty
+      services.bookshelf
+      services.bazarr
+      services.scrutiny
+      services.paperless
+      services.homeassistant
+      services.prowlarr
+      services.tailscale
+      services.radarr
+      services.pihole
+      services.jellyfin
+      services.enclosed
+      services.sonarr
+      services.documenso
+      services.syncthing
+      services.qbittorrent
+      services.mousehole
+      services.sabnzbd
+    ];
 
     nixos = {pkgs, ...}: {
       imports = let
@@ -52,11 +50,6 @@
 
       boot.loader.raspberry-pi.bootloader = "kernel";
       environment.systemPackages = [pkgs.raspberrypi-eeprom];
-
-      # ================================================================ #
-      # =                         DO NOT TOUCH                         = #
-      # ================================================================ #
-      system.stateVersion = "25.11";
     };
   };
 }
