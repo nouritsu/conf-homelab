@@ -23,11 +23,9 @@ in {
         (lib.filter (e: !(e.tunnel or false)) endpoint);
     in {
       environment.systemPackages = [pkgs.pihole-ftl];
-      networking = {
-        useDHCP = false;
-        interfaces.end0.useDHCP = true;
-        nameservers = ["127.0.0.1"];
-      };
+      # NetworkManager owns end0; it does DHCP itself and forces
+      # networking.useDHCP = false. Only the resolver is ours.
+      networking.nameservers = ["127.0.0.1"];
       services.resolved = {
         enable = true;
         extraConfig = ''
