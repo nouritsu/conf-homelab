@@ -11,7 +11,6 @@
 
         # hardware
         graphics
-        audio
         storage
         homelab-disko
 
