@@ -13,14 +13,14 @@
       };
     };
 
-    from-pc.nixos = {
-      users.users.aneesh.openssh.authorizedKeys.keys = [
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAwVvRZ6cNb1mSXehYaqGtX5EkdSb9IqKzdsXPepddhY aneesh@pc"
-      ];
-
-      users.users.root.openssh.authorizedKeys.keys = [
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICaUPFDTKQTSGFOTAzOtkGfLY93kUimERX1TcVi+WIiU aneesh@pc-enc"
-      ];
+    # one key for both accounts, bound once so that stays true by construction:
+    # root used to be reachable only by the pc-enc key, which meant two keys to
+    # keep and the deploy account gated behind the one not used day to day
+    from-pc.nixos = let
+      key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAwVvRZ6cNb1mSXehYaqGtX5EkdSb9IqKzdsXPepddhY aneesh@pc";
+    in {
+      users.users.aneesh.openssh.authorizedKeys.keys = [key];
+      users.users.root.openssh.authorizedKeys.keys = [key];
     };
 
     from-phone.nixos = {
