@@ -16,7 +16,6 @@
     apps.fish
     apps.nh
 
-    aneesh
     secrets
   ];
 }
