@@ -10,6 +10,7 @@
 
     ssh
     ssh.from-pc
+    ssh.from-laptop
     ssh.from-phone
 
     apps.core
