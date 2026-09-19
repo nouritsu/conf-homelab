@@ -1,4 +1,6 @@
 {den, ...}: let
+  inherit (den.lib.homelab) host-ip lan-interface;
+
   port = 51821;
   wg-port = 51820;
   data-dir = "/data/wg-easy";
@@ -24,7 +26,7 @@ in {
         environment = {
           INIT_ENABLED = "true";
           INIT_USERNAME = "admin";
-          INIT_DNS = "${den.lib.homelab.host-ip},1.1.1.1";
+          INIT_DNS = "${host-ip},1.1.1.1";
           WG_POST_UP = "";
           WG_POST_DOWN = "";
         };
@@ -48,7 +50,7 @@ in {
       networking.nat = {
         enable = true;
         enableIPv6 = true;
-        externalInterface = "end0";
+        externalInterface = lan-interface;
         internalInterfaces = ["wg0"];
       };
       networking.firewall = {

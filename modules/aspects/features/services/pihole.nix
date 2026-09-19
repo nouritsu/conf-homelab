@@ -14,7 +14,7 @@ in {
       lib,
       ...
     }: let
-      inherit (den.lib.homelab) fqdn host-ip;
+      inherit (den.lib.homelab) fqdn host-ip lan-interface;
 
       TWELVE_HOURS_SECONDS = 43200;
 
@@ -49,7 +49,7 @@ in {
         settings = {
           dns = {
             bind_hosts = [host-ip "127.0.0.1"];
-            interface = "end0";
+            interface = lan-interface;
             upstreams = ["1.1.1.1" "1.0.0.1"];
             domainNeeded = true;
             expandHosts = true;

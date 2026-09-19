@@ -7,6 +7,19 @@
   den.lib.homelab = rec {
     base-domain = "nouritsu.com";
     host-ip = "192.168.178.128";
+    lan-cidr = "192.168.178.0/24";
+    lan-interface = "end0";
+
+    # one provider behind both: postfix relays through it, and the services
+    # that send their own mail talk to it directly
+    smtp = {
+      host = "smtp.hostinger.com";
+      port = 465;
+    };
+    imap = {
+      host = "imap.hostinger.com";
+      port = 993;
+    };
 
     fqdn = subdomain: "${subdomain}.${base-domain}";
 

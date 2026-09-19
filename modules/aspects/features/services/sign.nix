@@ -1,9 +1,8 @@
 {den, ...}: let
+  inherit (den.lib.homelab) smtp;
+
   domain = den.lib.homelab.fqdn "sign";
   port = 3000;
-
-  smtp-host = "smtp.hostinger.com";
-  smtp-port = 465;
 in {
   den.aspects.srv-documenso = {
     endpoint = {
@@ -47,8 +46,8 @@ in {
         dependsOn = ["documenso-db"];
         ports = ["${toString port}:3000"];
         environment = {
-          NEXT_PRIVATE_SMTP_HOST = smtp-host;
-          NEXT_PRIVATE_SMTP_PORT = toString smtp-port;
+          NEXT_PRIVATE_SMTP_HOST = smtp.host;
+          NEXT_PRIVATE_SMTP_PORT = toString smtp.port;
           NEXT_PRIVATE_SMTP_SECURE = "true";
           PORT = toString port;
           NEXTAUTH_URL = "https://${domain}";
