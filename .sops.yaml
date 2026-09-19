@@ -1,6 +1,7 @@
 keys:
   - &homelab age1hug5f8wz0tr0ym9q8g7kzt5wce0krnfv25u8n3fvsvj9gy0lafss7e8u8r
   - &pc age1wygzuq7267u5mmrlc482fsfrdfd77jc0y3gs53v0jz04069gmesqq6waee
+  - &laptop age1q6pjxqhkml9kvxunkgramqm9mpz6274v880qfsrqvyy78naradaqtlzcc4
 creation_rules:
   # suffix match against modules/aspects/features/secrets/
   - path_regex: secrets/secrets.yaml$
@@ -8,8 +9,10 @@ creation_rules:
       - age:
           - *homelab
           - *pc
+          - *laptop
   - path_regex: secrets/cert.p12.enc$
     key_groups:
       - age:
           - *homelab
           - *pc
+          - *laptop
