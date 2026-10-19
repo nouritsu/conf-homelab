@@ -58,6 +58,8 @@ in {
             upstreams = ["1.1.1.1" "1.0.0.1"];
             domainNeeded = true;
             expandHosts = true;
+            # router-only names (lenovo.fritz.box) and lan reverse lookups go to the FRITZ!Box
+            revServers = ["true,192.168.178.0/24,192.168.178.1,fritz.box"];
             hosts =
               [
                 "192.168.178.1   gateway"
