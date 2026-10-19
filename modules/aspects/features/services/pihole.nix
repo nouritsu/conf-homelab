@@ -28,10 +28,10 @@ in {
       networking.nameservers = ["127.0.0.1"];
       services.resolved = {
         enable = true;
-        extraConfig = ''
-          DNSStubListener=no
-          MulticastDNS=off
-        '';
+        settings.Resolve = {
+          DNSStubListener = "no";
+          MulticastDNS = "off";
+        };
       };
       services.pihole-ftl = {
         enable = true;

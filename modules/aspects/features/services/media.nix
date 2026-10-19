@@ -5,6 +5,6 @@
       port = 5055;
     };
 
-    nixos.services.jellyseerr.enable = true;
+    nixos.services.seerr.enable = true;
   };
 }
