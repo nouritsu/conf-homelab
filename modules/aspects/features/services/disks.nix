@@ -3,8 +3,10 @@
     port = 8180;
 
     root = "/dev/nvme0n1";
-    hdd-1tb = "/dev/sda";
-    hdd-2tb = "/dev/sdb";
+
+    # sda/sdb swap between boots, and podman's --device can't take the ':' in by-id names
+    hdd-1tb = "/dev/hdd-1tb";
+    hdd-2tb = "/dev/hdd-2tb";
   in {
     endpoint = {
       subdomain = "disks";
@@ -12,11 +14,16 @@
     };
 
     nixos = {
+      services.udev.extraRules = ''
+        SUBSYSTEM=="block", ENV{DEVTYPE}=="disk", ENV{ID_SERIAL}=="TOSHIBA_DT01ACA100_000000123ADC-0:0", SYMLINK+="hdd-1tb"
+        SUBSYSTEM=="block", ENV{DEVTYPE}=="disk", ENV{ID_SERIAL}=="ST2000VM_003-1ET164_000000123ADC-0:0", SYMLINK+="hdd-2tb"
+      '';
+
       virtualisation.oci-containers.containers.scrutiny = {
         image = "ghcr.io/starosdev/scrutiny:latest-omnibus";
         ports = ["${toString port}:8080" "8187:8086"];
         extraOptions = ["--cap-add=SYS_ADMIN" "--cap-add=SYS_RAWIO"];
-        devices = [hdd-1tb hdd-2tb root];
+        devices = ["${hdd-1tb}:/dev/sda" "${hdd-2tb}:/dev/sdb" root];
         volumes = [
           "/run/udev:/run/udev:ro"
           "/data/scrutiny/config:/opt/scrutiny/config"
