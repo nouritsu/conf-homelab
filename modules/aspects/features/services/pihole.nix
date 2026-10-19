@@ -45,7 +45,7 @@ in {
         useDnsmasqConfig = true;
         lists = [
           {
-            url = "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/hosts/pro.plus.txt";
+            url = "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/pro.plus.txt";
             type = "block";
             enabled = true;
             description = "Hagezi Pro Plus";
