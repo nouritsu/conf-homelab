@@ -41,7 +41,6 @@
       in
         with rpinm; [
           base
-          page-size-16k
           display-vc4
           bluetooth
         ];
