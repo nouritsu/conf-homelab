@@ -1,4 +1,8 @@
-{den, ...}: let
+{
+  den,
+  inputs,
+  ...
+}: let
   port = 8081;
 in {
   den.aspects.services.pihole = {
@@ -10,6 +14,7 @@ in {
     # also the consumer: every non-tunnelled endpoint gets a local A record
     nixos = {
       endpoint,
+      config,
       pkgs,
       lib,
       ...
@@ -76,6 +81,14 @@ in {
         enable = true;
         ports = [port];
       };
+
+      # unstable's setup script tolerates already-present lists; drop once nixos-raspberrypi's nixpkgs has it
+      systemd.services.pihole-ftl-setup.script = lib.mkForce (
+        import "${inputs.nixpkgs}/nixos/modules/services/networking/pihole-ftl-setup-script.nix" {
+          cfg = config.services.pihole-ftl;
+          inherit config lib pkgs;
+        }
+      );
     };
   };
 }
