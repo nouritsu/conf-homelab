@@ -14,6 +14,8 @@
         # Building happens on the Pi. Evaluation is local and platform-agnostic,
         # so the aarch64 system needs no emulation here.
         #
+        # --no-reexec stops nixos-rebuild building the Pi's own nixos-rebuild here.
+        #
         # nixos-rebuild comes from PATH rather than pkgs: this only runs on a
         # NixOS machine, where it is always present and always matches the
         # system, and pinning it would add a download that can lag behind.
@@ -25,6 +27,7 @@
             --flake .#homelab \
             --build-host root@homelab \
             --target-host root@homelab \
+            --no-reexec \
             "$@"
         '';
       in [
