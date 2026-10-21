@@ -8,17 +8,15 @@
     import-tree.url = "github:vic/import-tree";
     den.url = "github:denful/den";
 
-    # nixos-raspberrypi pins the nixpkgs that actually builds the system; these
-    # two only expose plain NixOS modules, which take pkgs from the host, so
-    # their own nixpkgs was dead weight in the lock.
+    # nixos-raspberrypi pins the nixpkgs that actually builds the system; disko
+    # only exposes plain NixOS modules, which take pkgs from the host, so its
+    # own nixpkgs was dead weight in the lock.
     disko = {
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    sops-nix = {
-      url = "github:Mic92/sops-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    # its own nixpkgs is what cache.thalheim.io built sops-install-secrets against
+    sops-nix.url = "github:Mic92/sops-nix";
     nix-index-database = {
       url = "github:nix-community/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";

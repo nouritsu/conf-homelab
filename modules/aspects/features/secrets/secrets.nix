@@ -19,6 +19,9 @@
         defaultSopsFile = ./secrets.yaml;
         defaultSopsFormat = "yaml";
         age.keyFile = "${config.users.users.${owner}.home}/.config/sops/age/keys.txt";
+
+        # cached for aarch64, where the host-pkgs default compiles go on the pi
+        package = inputs.sops-nix.packages.${pkgs.stdenv.hostPlatform.system}.sops-install-secrets;
       };
 
       sops.secrets."documenso-cert" = {
