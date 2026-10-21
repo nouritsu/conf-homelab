@@ -50,6 +50,9 @@
 
       boot.loader.raspberry-pi.bootloader = "kernel";
       environment.systemPackages = [pkgs.raspberrypi-eeprom];
+
+      # the bcm2835 watchdog's maximum; a hung pi resets itself
+      systemd.settings.Manager.RuntimeWatchdogSec = "15s";
     };
   };
 }
