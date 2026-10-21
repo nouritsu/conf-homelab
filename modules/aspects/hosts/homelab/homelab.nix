@@ -53,6 +53,21 @@
 
       # the bcm2835 watchdog's maximum; a hung pi resets itself
       systemd.settings.Manager.RuntimeWatchdogSec = "15s";
+
+      # zram first, the nvme swapfile only as overflow
+      zramSwap.enable = true;
+      swapDevices = [
+        {
+          device = "/swap/swapfile";
+          size = 8 * 1024;
+          priority = 0;
+        }
+      ];
+
+      # own subvolume: btrfs won't snapshot one holding an active swapfile
+      systemd.services.mkswap-swap-swapfile.preStart = ''
+        [ -e /swap ] || btrfs subvolume create /swap
+      '';
     };
   };
 }
