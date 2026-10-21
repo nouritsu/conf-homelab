@@ -32,6 +32,9 @@
     get-container-port = mapping: lib.last (lib.splitString ":" mapping);
     has-duplicates = list: (builtins.length list) != (builtins.length (lib.unique list));
 
+    # named volumes have no leading /, so only bind mounts are kept
+    host-paths = c: lib.filter (lib.hasPrefix "/") (map (v: lib.head (lib.splitString ":" v)) c.volumes);
+
     restart-unit = name: lib.nameValuePair "restart-container-${name}";
   in {
     # defaults every container gets, applied through the upstream submodule
@@ -62,17 +65,26 @@
       # mmap regions than the default 65530
       boot.kernel.sysctl."vm.max_map_count" = 262144;
 
-      # every container is restarted nightly; a service opts out with
-      #   systemd.timers.restart-container-<name>.enable = false;
-      systemd.services = lib.mapAttrs' (name: _:
-        restart-unit name {
-          description = "Scheduled restart of ${name} container";
-          serviceConfig = {
-            Type = "oneshot";
-            ExecStart = "${pkgs.systemd}/bin/systemctl restart ${backend}-${name}.service";
-          };
-        })
-      containers;
+      systemd.services = lib.mkMerge [
+        # every container is restarted nightly; a service opts out with
+        #   systemd.timers.restart-container-<name>.enable = false;
+        (lib.mapAttrs' (name: _:
+          restart-unit name {
+            description = "Scheduled restart of ${name} container";
+            serviceConfig = {
+              Type = "oneshot";
+              ExecStart = "${pkgs.systemd}/bin/systemctl restart ${backend}-${name}.service";
+            };
+          })
+        containers)
+
+        # a missing nofail mount keeps its containers down, not writing beneath it
+        (lib.mapAttrs' (name: c:
+          lib.nameValuePair "${backend}-${name}" {
+            unitConfig.RequiresMountsFor = host-paths c;
+          })
+        containers)
+      ];
 
       systemd.timers = lib.mapAttrs' (name: _:
         restart-unit name {
