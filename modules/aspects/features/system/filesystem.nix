@@ -18,6 +18,9 @@
         "btrfs"
       ];
 
+      # monthly, once per device rather than per subvolume mount
+      services.btrfs.autoScrub.enable = true;
+
       environment.systemPackages = [pkgs.compsize pkgs.snapper];
     };
   };
