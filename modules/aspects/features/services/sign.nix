@@ -42,7 +42,7 @@ in {
       };
 
       virtualisation.oci-containers.containers.documenso = {
-        image = "documenso/documenso:latest";
+        image = "documenso/documenso:latest@sha256:23cd1a1004077281133db44b015a052b9e82120d42fa05c3db546f6ce8343f0c";
         dependsOn = ["documenso-db"];
         ports = ["${toString port}:3000"];
         environment = {
@@ -65,7 +65,7 @@ in {
       };
 
       virtualisation.oci-containers.containers.documenso-db = {
-        image = "postgres:15";
+        image = "postgres:15@sha256:866264fb97643e747f9d0981cd060114f83b49450e5bac4988324bb3c6af2fd7";
         environment = {
           POSTGRES_USER = "documenso";
           POSTGRES_DB = "documenso";

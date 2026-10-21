@@ -12,7 +12,7 @@ in {
       imports = [(den.lib.homelab.via-gluetun "prowlarr")];
 
       virtualisation.oci-containers.containers.prowlarr = {
-        image = "lscr.io/linuxserver/prowlarr:latest";
+        image = "lscr.io/linuxserver/prowlarr:latest@sha256:d3e9307b320b6772749a2cf8fc2712e9e824c4930b034680ad4d08a9e2f25884";
         volumes = ["/data/prowlarr:/config"];
       };
 

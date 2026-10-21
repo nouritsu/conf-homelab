@@ -14,7 +14,7 @@ in {
         imports = [(den.lib.homelab.via-gluetun "qbittorrent")];
 
         virtualisation.oci-containers.containers.qbittorrent = {
-          image = "lscr.io/linuxserver/qbittorrent:latest";
+          image = "lscr.io/linuxserver/qbittorrent:latest@sha256:f430d70c70d1547fded30fbc3181c4750cef354212a5138ab754eba9ba8bd9e1";
 
           environment = {
             WEBUI_PORT = "8081";
@@ -52,7 +52,7 @@ in {
         imports = [(den.lib.homelab.via-gluetun "mousehole")];
 
         virtualisation.oci-containers.containers.mousehole = {
-          image = "tmmrtn/mousehole:latest";
+          image = "tmmrtn/mousehole:latest@sha256:9adfcfddb3395d33f0fbef50a6dc52a930769c57f2c0af2b3b9d6f7bfda6195c";
           volumes = ["/data/mousehole:/srv/mousehole"];
         };
 

@@ -27,7 +27,7 @@ in {
       };
 
       virtualisation.oci-containers.containers.aria2-pro = {
-        image = "p3terx/aria2-pro:latest";
+        image = "p3terx/aria2-pro:latest@sha256:086d1a37c586edb07ec0fb956bf9edd89d1d38d138ad5309ff96d510c8c9a011";
         environment = {
           PUID = "1000";
           PGID = "1000";
@@ -39,7 +39,7 @@ in {
       };
 
       virtualisation.oci-containers.containers.ariang = {
-        image = "p3terx/ariang:latest";
+        image = "p3terx/ariang:latest@sha256:2666293fb14b1ac03350cb113a3e51e42bf2346bcf594d476fda60d470653782";
         ports = ["${toString web-port}:6880"];
         extraOptions = ["--log-driver=json-file" "--log-opt=max-size=1m"];
       };

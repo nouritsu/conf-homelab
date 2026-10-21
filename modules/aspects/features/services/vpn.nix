@@ -22,7 +22,7 @@ in {
       };
 
       virtualisation.oci-containers.containers.wg-easy = {
-        image = "ghcr.io/wg-easy/wg-easy:15";
+        image = "ghcr.io/wg-easy/wg-easy:15@sha256:cf815209439101842f81d62bb25f7d66140e4cf8c100b4de5d0e84569d38732a";
         environment = {
           INIT_ENABLED = "true";
           INIT_USERNAME = "admin";
