@@ -15,8 +15,7 @@
         # as aneesh and dies on `nix-env -p /nix/var/nix/profiles/system --set`
         # with "Permission denied". Agreeing on the user is what avoids that.
         #
-        # Building happens on the Pi. Evaluation is local and platform-agnostic,
-        # so the aarch64 system needs no emulation here.
+        # Evaluation runs here, which can't build aarch64, so import-from-derivation is refused.
         #
         # --no-reexec stops nixos-rebuild building the Pi's own nixos-rebuild here.
         #
@@ -32,6 +31,7 @@
             --build-host root@homelab \
             --target-host root@homelab \
             --no-reexec \
+            --option allow-import-from-derivation false \
             "$@"
         '';
       in [

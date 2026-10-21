@@ -42,7 +42,6 @@ in {
         enable = true;
         openFirewallDNS = true;
         openFirewallWebserver = true;
-        useDnsmasqConfig = true;
         lists = [
           {
             url = "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/pro.plus.txt";
