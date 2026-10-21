@@ -1,4 +1,7 @@
 {den, ...}: {
+  # its internal ca signs every lan vhost; a new one is trusted nowhere
+  den.aspects.caddy.backup.paths = ["/var/lib/caddy"];
+
   # consumes the `endpoint` quirk: one vhost per service that declared one
   den.aspects.caddy.nixos = {
     endpoint,

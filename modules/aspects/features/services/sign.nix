@@ -10,6 +10,7 @@ in {
       tunnel = true;
       inherit port;
     };
+    backup.paths = ["/var/lib/containers/storage/volumes/documenso-db"];
 
     nixos = {config, ...}: {
       sops.secrets."sign/nextauth-secret" = {};

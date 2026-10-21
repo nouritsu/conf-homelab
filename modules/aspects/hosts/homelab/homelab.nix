@@ -6,6 +6,7 @@
   den.aspects.homelab = {
     includes = with den.aspects; [
       server
+      backup
 
       # hardware
       graphics

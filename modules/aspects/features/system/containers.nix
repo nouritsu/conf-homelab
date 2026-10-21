@@ -1,4 +1,7 @@
 {
+  # every container keeps its state under /data
+  den.aspects.containers.backup.paths = ["/data"];
+
   # a class body is a full NixOS module, so the submodule-extending option
   # declaration ports unchanged. It must stay free of entity args (host/user)
   # or den would emit the option declaration once per entity.

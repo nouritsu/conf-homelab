@@ -6,6 +6,7 @@
       subdomain = "files";
       inherit port;
     };
+    backup.paths = ["/media/shared"];
 
     nixos = {config, ...}: {
       sops.secrets."copyparty/aneesh-password" = {};

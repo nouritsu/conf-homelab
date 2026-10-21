@@ -6,6 +6,12 @@
       subdomain = "sync";
       inherit port;
     };
+    # the folders too: a deletion syncs everywhere, a snapshot keeps it
+    backup = {config, ...}: {
+      paths =
+        [config.services.syncthing.dataDir]
+        ++ map (f: f.path) (builtins.attrValues config.services.syncthing.settings.folders);
+    };
 
     nixos = {
       services.syncthing = {

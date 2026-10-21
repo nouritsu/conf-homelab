@@ -9,6 +9,8 @@ in {
       subdomain = "mail";
       inherit port;
     };
+    # roundcube's local postgres
+    backup.paths = ["/var/lib/postgresql"];
 
     nixos = {
       services.roundcube = {

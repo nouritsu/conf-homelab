@@ -6,6 +6,7 @@
       subdomain = "uptime";
       inherit port;
     };
+    backup.paths = ["/var/lib/private/uptime-kuma"];
 
     nixos.services.uptime-kuma = {
       enable = true;

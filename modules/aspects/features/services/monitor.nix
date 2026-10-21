@@ -6,6 +6,7 @@
       subdomain = "monitor";
       inherit port;
     };
+    backup.paths = ["/var/lib/private/beszel-hub"];
 
     nixos = {config, ...}: {
       sops.secrets."beszel/token" = {};

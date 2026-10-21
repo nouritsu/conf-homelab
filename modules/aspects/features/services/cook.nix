@@ -6,6 +6,9 @@
       subdomain = "cook";
       inherit port;
     };
+    backup = {config, ...}: {
+      paths = [config.services.cook-cli.basePath];
+    };
 
     nixos.services.cook-cli = {
       enable = true;

@@ -6,6 +6,12 @@
       subdomain = "player";
       inherit port;
     };
+    backup.exclude = [
+      "/data/jellyfin/cache"
+      "/data/jellyfin/log"
+      "/data/jellyfin/data/temp"
+      "/data/jellyfin/data/transcodes"
+    ];
 
     nixos = {
       virtualisation.oci-containers.containers.jellyfin = {

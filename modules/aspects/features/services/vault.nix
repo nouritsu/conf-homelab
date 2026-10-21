@@ -6,6 +6,7 @@ in {
       subdomain = "vault";
       inherit port;
     };
+    backup.paths = ["/var/lib/vaultwarden"];
 
     nixos = {config, ...}: {
       sops.secrets."vaultwarden/admin-token" = {};

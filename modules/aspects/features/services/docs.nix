@@ -6,6 +6,9 @@ in {
       subdomain = "docs";
       inherit port;
     };
+    backup = {config, ...}: {
+      paths = [config.services.paperless.dataDir];
+    };
 
     nixos = {config, ...}: {
       sops.secrets."paperless/admin-password" = {};

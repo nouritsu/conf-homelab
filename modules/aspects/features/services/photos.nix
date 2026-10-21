@@ -6,6 +6,7 @@
       subdomain = "photos";
       inherit port;
     };
+    backup.paths = ["/var/lib/containers/storage/volumes/immich-db"];
 
     nixos = {config, ...}: {
       sops.secrets."photos/postgres-password" = {};
