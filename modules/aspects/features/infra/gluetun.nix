@@ -30,11 +30,21 @@
         "--cap-add=NET_ADMIN"
         "--cap-add=NET_RAW"
         "--device=/dev/net/tun:/dev/net/tun"
+        # the image declares no healthcheck of its own
+        "--health-cmd=/gluetun-entrypoint healthcheck"
+        "--health-interval=5s"
+        "--health-timeout=5s"
+        "--health-retries=3"
       ];
+      # started means tunnel up, so nothing behind it runs before the firewall
+      podman.sdnotify = "healthy";
       ports =
         ["8888:8888" "8388:8388" "59610:59610" "59610:59610/udp"]
         ++ lib.sort (a: b: a < b) gluetun-ports;
     };
+
+    # a vpn that never comes up fails the start instead of hanging a deploy
+    systemd.services.podman-gluetun.serviceConfig.TimeoutStartSec = lib.mkForce "3min";
 
     systemd.timers.restart-container-gluetun.enable = false; # vpn
   };

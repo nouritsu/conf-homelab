@@ -34,6 +34,12 @@
         dependsOn = ["gluetun"];
         extraOptions = lib.mkAfter ["--network=container:gluetun"];
       };
+
+      # down whenever gluetun is, back once it is healthy again
+      systemd.services."podman-${name}" = {
+        bindsTo = ["podman-gluetun.service"];
+        upheldBy = ["podman-gluetun.service"];
+      };
     };
   };
 }
