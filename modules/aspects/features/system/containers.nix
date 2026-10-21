@@ -39,7 +39,7 @@
       type = lib.types.attrsOf (lib.types.submodule ({config, ...}: {
         config = lib.mkMerge [
           {
-            environment.TZ = lib.mkDefault "Europe/Berlin";
+            environment.TZ = lib.mkDefault top.time.timeZone;
 
             # 1400 sits between a service's own flags (1000) and
             # --network=container:gluetun (mkAfter, 1500)

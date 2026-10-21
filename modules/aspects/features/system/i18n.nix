@@ -17,6 +17,10 @@
       };
     };
 
+    tz-germany.nixos = {
+      time.timeZone = "Europe/Berlin";
+    };
+
     tz-automatic.nixos = {
       services.automatic-timezoned.enable = true;
     };

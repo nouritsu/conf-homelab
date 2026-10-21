@@ -1,4 +1,4 @@
-{den, ...}: {
+{
   # consumes the tunnelled subset of the `endpoint` quirk
   den.aspects.rathole.nixos = {
     endpoint,

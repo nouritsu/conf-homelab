@@ -3,6 +3,8 @@
     includes = [
       den.batteries.primary-user
       (den.batteries.user-shell "fish")
+      # host aspects' `user` keys, like ssh.from-*, reach this user through it
+      den.batteries.host-aspects
     ];
 
     # the `user` class is routed into users.users.aneesh; wheel and

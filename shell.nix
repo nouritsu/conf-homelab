@@ -1,5 +1,9 @@
 {
-  perSystem = {pkgs, ...}: {
+  perSystem = {
+    config,
+    pkgs,
+    ...
+  }: {
     devShells.default = pkgs.mkShell {
       packages = let
         # Both hosts are the Pi, and both are spelled root@ on purpose.
@@ -32,7 +36,10 @@
         '';
       in [
         deploy
+        config.treefmt.build.wrapper
       ];
+
+      shellHook = config.pre-commit.installationScript;
     };
   };
 }
