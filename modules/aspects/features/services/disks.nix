@@ -20,7 +20,7 @@
       '';
 
       virtualisation.oci-containers.containers.scrutiny = {
-        image = "ghcr.io/starosdev/scrutiny:latest-omnibus@sha256:6c0fbd8339130c5d89ba2cd3c957176fc2a736f8950b281bc9c415e65ac692dc";
+        image = "ghcr.io/starosdev/scrutiny:latest-omnibus@sha256:614f2805b0e76565463ce3d5e400ebe4a1e7f3989877f4cb092eba00137067ba";
         ports = ["${toString port}:8080" "8187:8086"];
         extraOptions = ["--cap-add=SYS_ADMIN" "--cap-add=SYS_RAWIO"];
         devices = ["${hdd-1tb}:/dev/sda" "${hdd-2tb}:/dev/sdb" root];
