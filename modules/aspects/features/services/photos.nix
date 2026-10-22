@@ -30,7 +30,7 @@
       };
 
       virtualisation.oci-containers.containers.immich-server = {
-        image = "ghcr.io/immich-app/immich-server:release@sha256:aa163d2e1cc2b16a9515dd1fef901e6f5231befad7024f093d7be1f2da14341a";
+        image = "ghcr.io/immich-app/immich-server:release@sha256:485d546a2e31d6a8b4db8423fcba5c109de8c218d93410af115fd1ccfc4352a6";
         dependsOn = ["immich-redis" "immich-db"];
         ports = ["${toString port}:2283"];
         environment.IMMICH_MACHINE_LEARNING_URL = "http://immich-ml:3003";
@@ -45,7 +45,7 @@
       };
 
       virtualisation.oci-containers.containers.immich-ml = {
-        image = "ghcr.io/immich-app/immich-machine-learning:release@sha256:b213fa3c82d27a21a299c46ffbb38a091f18384db1ad67d409a3b34fe0fce556";
+        image = "ghcr.io/immich-app/immich-machine-learning:release@sha256:5b28c9352c8374b8a1ed96fbdd8d6755fea6e43510ec43fdf6538aa02ea40f56";
         ports = ["3003:3003"];
         volumes = ["immich-ml-cache:/cache"];
         environmentFiles = [config.sops.templates."immich.env".path];
