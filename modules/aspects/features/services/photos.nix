@@ -52,7 +52,7 @@
       };
 
       virtualisation.oci-containers.containers.immich-redis = {
-        image = "docker.io/valkey/valkey:9@sha256:2bce660b767cb62c8c0ea020e94a230093be63dbd6af4f21b044960517a5842d";
+        image = "docker.io/valkey/valkey:9@sha256:418652cfb58ef879d4978c33553735d7147016032d5aefaa14c828e611eb9dfd";
         ports = ["6379:6379"];
         extraOptions = [
           "--health-cmd=redis-cli ping || exit 1"
