@@ -9,7 +9,7 @@
 
     nixos = {
       virtualisation.oci-containers.containers.grocy = {
-        image = "lscr.io/linuxserver/grocy:latest@sha256:72cadb310c024d20e2a88694eb00301af369fb3d2812cd798331708cd6a78505";
+        image = "lscr.io/linuxserver/grocy:latest@sha256:d63bffe9afb2ef1a23fa7ce0749cdaeba9c169fb644b16eed270884a1b2f4ac9";
         ports = ["${toString port}:80"];
         volumes = ["/data/grocy:/config"];
       };
