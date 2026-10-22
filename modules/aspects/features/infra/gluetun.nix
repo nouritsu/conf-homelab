@@ -17,7 +17,7 @@
     };
 
     virtualisation.oci-containers.containers.gluetun = {
-      image = "qmcgaw/gluetun:latest@sha256:9cdf556fe0dc2ef6560cc5d5ea9392c1d035b9206f44cef77d49c35e494c5e33";
+      image = "qmcgaw/gluetun:latest@sha256:c2ee4191762fca6b6a3c3359a731198a95d9c9af4db32d466e223bf3a84e779b";
       environment = {
         VPN_SERVICE_PROVIDER = "airvpn";
         VPN_TYPE = "wireguard";
