@@ -12,7 +12,7 @@ in {
       imports = [(den.lib.homelab.via-gluetun "bazarr")];
 
       virtualisation.oci-containers.containers.bazarr = {
-        image = "lscr.io/linuxserver/bazarr:latest@sha256:d40ee61030a9afafddfdd58d160281b865bfcad7cb66e920116fd6fd40668cbb";
+        image = "lscr.io/linuxserver/bazarr:latest@sha256:946dc8c5bb5331418eac60050cf40a63cb8f66ac039841dda493870e3559799c";
         volumes = ["/data/bazarr:/config" "/media/media:/media"];
       };
 
