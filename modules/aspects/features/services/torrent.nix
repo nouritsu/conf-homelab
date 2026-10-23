@@ -14,7 +14,7 @@ in {
         imports = [(den.lib.homelab.via-gluetun "qbittorrent")];
 
         virtualisation.oci-containers.containers.qbittorrent = {
-          image = "lscr.io/linuxserver/qbittorrent:latest@sha256:f430d70c70d1547fded30fbc3181c4750cef354212a5138ab754eba9ba8bd9e1";
+          image = "lscr.io/linuxserver/qbittorrent:latest@sha256:e887804fa9de4c60f5f0fb1f3a7e4febe40a8f69fe736f70c4e8589b1f868dab";
 
           environment = {
             WEBUI_PORT = "8081";
