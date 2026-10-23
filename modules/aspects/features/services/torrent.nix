@@ -52,7 +52,7 @@ in {
         imports = [(den.lib.homelab.via-gluetun "mousehole")];
 
         virtualisation.oci-containers.containers.mousehole = {
-          image = "tmmrtn/mousehole:latest@sha256:9adfcfddb3395d33f0fbef50a6dc52a930769c57f2c0af2b3b9d6f7bfda6195c";
+          image = "tmmrtn/mousehole:latest@sha256:2fc02b12362581e60bfd6adba788bda9eda93f8f31ed089581eeabcee4518b0d";
           volumes = ["/data/mousehole:/srv/mousehole"];
         };
 
