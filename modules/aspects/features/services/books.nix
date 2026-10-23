@@ -12,7 +12,7 @@ in {
       imports = [(den.lib.homelab.via-gluetun "bookshelf")];
 
       virtualisation.oci-containers.containers.bookshelf = {
-        image = "ghcr.io/pennydreadful/bookshelf:hardcover@sha256:388eecc94362580eae31ee0a454be6af516f8a311f8432a521c202fb475f4359";
+        image = "ghcr.io/pennydreadful/bookshelf:hardcover@sha256:67498dd5ece516867d72ee642abd6c1a66b36a135c8f7da0127109564372beb1";
         extraOptions = ["--user=1000:${toString config.users.groups.data.gid}"];
         volumes = ["/data/bookshelf:/config" "/media/download:/data" "/media/media:/media"];
       };
