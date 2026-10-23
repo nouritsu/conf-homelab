@@ -51,7 +51,7 @@
       };
 
       virtualisation.oci-containers.containers.copyparty = {
-        image = "copyparty/dj:latest@sha256:bffe4832c1798e194f08c22068f2b5a6bccb10d0b32de4651b507930ed3cdc88";
+        image = "copyparty/dj:latest@sha256:c8b279b62e7e05d99d1ac7acac3876ebea90c54b16ca3e2b966e7381fc53b6f9";
 
         ports = ["${toString port}:3923"];
 
