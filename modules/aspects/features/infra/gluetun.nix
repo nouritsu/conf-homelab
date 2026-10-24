@@ -30,11 +30,14 @@
         "--cap-add=NET_ADMIN"
         "--cap-add=NET_RAW"
         "--device=/dev/net/tun:/dev/net/tun"
-        # the image declares no healthcheck of its own
-        "--health-cmd=/gluetun-entrypoint healthcheck"
+        # the image declares none, and gluetun's own misses a wedged dns forwarder
+        "--health-cmd=/gluetun-entrypoint healthcheck && nslookup -timeout=3 -retry=1 github.com 127.0.0.1 >/dev/null"
         "--health-interval=5s"
         "--health-timeout=5s"
-        "--health-retries=3"
+        # a minute, so gluetun's own vpn restarts don't trip it
+        "--health-retries=12"
+        # a dead tunnel gets killed and restarted rather than left unhealthy
+        "--health-on-failure=kill"
       ];
       # started means tunnel up, so nothing behind it runs before the firewall
       podman.sdnotify = "healthy";
