@@ -1,5 +1,8 @@
 {den, ...}: let
-  inherit (den.lib.homelab) fqdn lan-cidr;
+  inherit (den.lib.homelab) fqdn lan-cidr lan-interface;
+
+  # fixed so the firewall can let peers reach it directly
+  port = 41641;
 in {
   den.aspects.services.tailscale.nixos = {config, ...}: {
     sops.secrets."tailscale/authkey" = {};
@@ -15,7 +18,9 @@ in {
 
       environment = {
         TS_STATE_DIR = "/var/lib/tailscale";
-        TS_EXTRA_ARGS = "--reset --login-server=https://${fqdn "vpn"} --advertise-routes=${lan-cidr} --accept-dns=false";
+        TS_USERSPACE = "false";
+        TS_TAILSCALED_EXTRA_ARGS = "--port=${toString port}";
+        TS_EXTRA_ARGS = "--reset --login-server=https://${fqdn "vpn"} --advertise-routes=${lan-cidr} --accept-dns=false --netfilter-mode=off";
       };
 
       environmentFiles = [config.sops.templates."tailscale.env".path];
@@ -44,6 +49,17 @@ in {
       "net.ipv6.conf.all.forwarding" = 1;
     };
 
-    networking.firewall.checkReversePath = "loose";
+    # the image only speaks legacy iptables, which this kernel lacks
+    networking.nat = {
+      enable = true;
+      externalInterface = lan-interface;
+      internalInterfaces = ["tailscale0"];
+    };
+
+    networking.firewall = {
+      checkReversePath = "loose";
+      allowedUDPPorts = [port];
+      trustedInterfaces = ["tailscale0"];
+    };
   };
 }

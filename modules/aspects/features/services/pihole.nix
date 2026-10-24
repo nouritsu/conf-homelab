@@ -54,6 +54,8 @@ in {
           dns = {
             bind_hosts = [host-ip "127.0.0.1"];
             interface = lan-interface;
+            # LOCAL ignores tailnet peers, since tailscale0 is only a /32
+            listeningMode = "ALL";
             upstreams = ["1.1.1.1" "1.0.0.1"];
             domainNeeded = true;
             expandHosts = true;
