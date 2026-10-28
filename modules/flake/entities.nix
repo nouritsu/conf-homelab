@@ -8,15 +8,23 @@ in {
     instantiate = rpi;
     users.aneesh = {};
     tunnels-via = "vps";
+
+    # the Pi builds its own system; root@ for both, as activation needs root
+    deploy = {
+      target = "root@homelab";
+      build-host = "root@homelab";
+    };
   };
 
   den.hosts.x86_64-linux.vps = {
     instantiate = inputs.nixpkgs-vps.lib.nixosSystem;
     users.aneesh = {};
+    deploy.target = "root@nouritsu.com";
   };
 
   den.hosts.x86_64-linux.nenya = {
     users.aneesh = {};
+    deploy.target = "root@82.26.94.225";
   };
 
   # the user has to be declared on this host too: check-all selects the homelab

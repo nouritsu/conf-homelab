@@ -8,6 +8,21 @@
         type = types.nullOr types.str;
         default = null;
       };
+
+      deploy = mkOption {
+        description = "Where `deploy <host>` builds and activates; null for hosts that are never deployed.";
+        default = null;
+        type = types.nullOr (types.submodule {
+          options = {
+            target = mkOption {type = types.str;};
+            # null builds on this machine and lets the target substitute
+            build-host = mkOption {
+              type = types.nullOr types.str;
+              default = null;
+            };
+          };
+        });
+      };
     };
   };
 }

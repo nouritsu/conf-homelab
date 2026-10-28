@@ -1,4 +1,22 @@
 {
+  config,
+  lib,
+  ...
+}: let
+  deployable =
+    lib.filterAttrs (_: h: h.deploy != null)
+    (lib.concatMapAttrs (_: hosts: hosts) config.den.hosts);
+
+  built-here = h: h.deploy.build-host == null;
+
+  deploy-flags = h:
+    ["--target-host" h.deploy.target]
+    ++ (
+      if built-here h
+      then ["--use-substitutes"]
+      else ["--build-host" h.deploy.build-host "--option" "allow-import-from-derivation" "false"]
+    );
+in {
   perSystem = {
     config,
     pkgs,
@@ -6,36 +24,72 @@
   }: {
     devShells.default = pkgs.mkShell {
       packages = let
-        # Both hosts are the Pi, and both are spelled root@ on purpose.
+        # Evaluation runs here, which can't build aarch64, so a host built
+        # elsewhere refuses import-from-derivation. One built here may use it.
         #
-        # nixos-rebuild multiplexes ssh over ControlPath=<tmp>/ssh-%n, and %n is
-        # the hostname alone - it carries no user. Two phases aimed at one
-        # hostname therefore share one socket, and the second silently rides the
-        # first one's session: a root@ target behind an aneesh build phase runs
-        # as aneesh and dies on `nix-env -p /nix/var/nix/profiles/system --set`
-        # with "Permission denied". Agreeing on the user is what avoids that.
-        #
-        # Evaluation runs here, which can't build aarch64, so import-from-derivation is refused.
-        #
-        # --no-reexec stops nixos-rebuild building the Pi's own nixos-rebuild here.
+        # --no-reexec stops nixos-rebuild building the target's own nixos-rebuild here.
         #
         # nixos-rebuild comes from PATH rather than pkgs: this only runs on a
         # NixOS machine, where it is always present and always matches the
         # system, and pinning it would add a download that can lag behind.
         deploy = pkgs.writeShellScriptBin "deploy" ''
           set -euo pipefail
+          usage="usage: deploy <${lib.concatStringsSep "|" (lib.attrNames deployable)}> [action] [nixos-rebuild args]"
+          host="''${1:?$usage}"
+          shift
           action="''${1:-switch}"
           shift || true
-          exec nixos-rebuild "$action" \
-            --flake .#homelab \
-            --build-host root@homelab \
-            --target-host root@homelab \
-            --no-reexec \
-            --option allow-import-from-derivation false \
-            "$@"
+
+          case "$host" in
+          ${lib.concatStrings (lib.mapAttrsToList (name: h: ''
+              ${name}) flags=(${lib.escapeShellArgs (deploy-flags h)}) ;;
+            '')
+            deployable)}
+            *) echo "$usage" >&2; exit 1 ;;
+          esac
+
+          exec nixos-rebuild "$action" --flake ".#$host" --no-reexec "''${flags[@]}" "$@"
+        '';
+
+        # hosts running something other than this tree, e.g. the vps after a tunnel change on the homelab
+        stale = pkgs.writeShellScriptBin "stale" ''
+          set -uo pipefail
+          check() {
+            local host=$1 target=$2 ifd=$3 want have
+            want=$(nix eval --raw ".#nixosConfigurations.$host.config.system.build.toplevel.outPath" \
+              --option allow-import-from-derivation "$ifd" 2>/dev/null) || { echo "$host: does not evaluate"; return; }
+            have=$(ssh -o BatchMode=yes -o ConnectTimeout=5 "$target" readlink /run/current-system 2>/dev/null) \
+              || { echo "$host: unreachable"; return; }
+            if [ "$want" = "$have" ]; then echo "$host: up to date"; else echo "$host: stale, run deploy $host"; fi
+          }
+          ${lib.concatStrings (lib.mapAttrsToList (name: h: ''
+              check ${name} ${lib.escapeShellArg h.deploy.target} ${lib.boolToString (built-here h)}
+            '')
+            deployable)}
+        '';
+
+        # a fresh install: disko wipes the target's disk, the age key lands where its sops looks
+        provision = pkgs.writeShellScriptBin "provision" ''
+          set -euo pipefail
+          usage="usage: provision <host> <root@address> <age-key-file>"
+          host="''${1:?$usage}"
+          dest="''${2:?$usage}"
+          key="''${3:?$usage}"
+
+          keyfile=$(nix eval --raw ".#nixosConfigurations.$host.config.sops.age.keyFile")
+          read -rp "this wipes every disk disko manages on $dest; type '$host' to go on: " answer
+          [ "$answer" = "$host" ] || exit 1
+
+          extra=$(mktemp -d)
+          trap 'rm -rf "$extra"' EXIT
+          install -D -m 400 "$key" "$extra$keyfile"
+
+          ${lib.getExe pkgs.nixos-anywhere} --flake ".#$host" --target-host "$dest" --extra-files "$extra"
         '';
       in [
         deploy
+        stale
+        provision
         config.treefmt.build.wrapper
       ];
 
