@@ -23,6 +23,9 @@
 
     fqdn = subdomain: "${subdomain}.${base-domain}";
 
+    # sopsFile for the secrets two hosts must agree on
+    shared-secrets = ../aspects/features/secrets/shared.yaml;
+
     # Put a container on gluetun's network. It can publish no ports of its own;
     # the service declares them through the `gluetun-ports` quirk and gluetun
     # publishes them on its behalf.

@@ -1,4 +1,4 @@
-{
+{den, ...}: {
   den.aspects.services.beszel = let
     port = 8090;
   in {
@@ -10,7 +10,7 @@
 
     nixos = {config, ...}: {
       sops.secrets."beszel/token" = {};
-      sops.secrets."beszel/key" = {};
+      sops.secrets."beszel/key".sopsFile = den.lib.homelab.shared-secrets;
 
       sops.templates."beszel.env" = {
         content = ''

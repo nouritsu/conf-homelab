@@ -1,4 +1,4 @@
-{
+{den, ...}: {
   # consumes the tunnelled subset of the `endpoint` quirk
   den.aspects.rathole.nixos = {
     endpoint,
@@ -17,7 +17,7 @@
       lib.sort (a: b: a.subdomain < b.subdomain)
       (lib.filter (e: e.tunnel or false) endpoint);
   in {
-    sops.secrets."rathole/token" = {};
+    sops.secrets."rathole/token".sopsFile = den.lib.homelab.shared-secrets;
     sops.secrets."rathole/remote-addr" = {};
 
     services.rathole = {

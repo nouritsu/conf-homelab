@@ -1,5 +1,6 @@
 keys:
   - &homelab age1hug5f8wz0tr0ym9q8g7kzt5wce0krnfv25u8n3fvsvj9gy0lafss7e8u8r
+  - &vps age1dd6y7h7qxdc8zul4qhskc6lqwdmhx9q267n7mw8ry4j7sukxms2qv5pda3
   - &pc age1wygzuq7267u5mmrlc482fsfrdfd77jc0y3gs53v0jz04069gmesqq6waee
   - &laptop age1q6pjxqhkml9kvxunkgramqm9mpz6274v880qfsrqvyy78naradaqtlzcc4
 creation_rules:
@@ -8,6 +9,14 @@ creation_rules:
     key_groups:
       - age:
           - *homelab
+          - *pc
+          - *laptop
+  # only what two hosts must agree on
+  - path_regex: features/secrets/shared.yaml$
+    key_groups:
+      - age:
+          - *homelab
+          - *vps
           - *pc
           - *laptop
   - path_regex: secrets/cert.p12.enc$
