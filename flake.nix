@@ -1,9 +1,17 @@
 {
-  description = "My rpi5 homelab configuration";
+  description = "My servers: the rpi5 homelab and the vps in front of it";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixos-raspberrypi.url = "github:nvmd/nixos-raspberrypi/main";
+
+    # what the vps last ran from nixos-vps; dropped once its port is deployed
+    nixpkgs-vps.url = "github:NixOS/nixpkgs/6c9a78c09ff4d6c21d0319114873508a6ec01655";
+    headplane = {
+      url = "github:tale/headplane/dfda629b12e50a555886902d9e4bd94753e1993a";
+      inputs.nixpkgs.follows = "nixpkgs-vps";
+    };
+
     flake-parts.url = "github:hercules-ci/flake-parts";
     import-tree.url = "github:vic/import-tree";
     den.url = "github:denful/den";

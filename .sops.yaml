@@ -11,6 +11,12 @@ creation_rules:
           - *homelab
           - *pc
           - *laptop
+  - path_regex: hosts/vps/secrets.yaml$
+    key_groups:
+      - age:
+          - *vps
+          - *pc
+          - *laptop
   # only what two hosts must agree on
   - path_regex: features/secrets/shared.yaml$
     key_groups:

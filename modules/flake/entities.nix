@@ -10,6 +10,11 @@ in {
     tunnels-via = "vps";
   };
 
+  den.hosts.x86_64-linux.vps = {
+    instantiate = inputs.nixpkgs-vps.lib.nixosSystem;
+    users.aneesh = {};
+  };
+
   # the user has to be declared on this host too: check-all selects the homelab
   # aspect, not the homelab entity, so it does not inherit its users
   den.hosts.aarch64-linux.check-all = {
