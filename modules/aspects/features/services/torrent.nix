@@ -48,12 +48,30 @@ in {
       };
       gluetun-ports = ["${toString mam-port}:5010"];
 
-      nixos = {
+      nixos = {config, ...}: let
+        domain = den.lib.homelab.fqdn "mam";
+      in {
         imports = [(den.lib.homelab.via-gluetun "mousehole")];
+
+        sops.secrets."mousehole/password" = {};
+        sops.templates."mousehole.env" = {
+          content = ''
+            MOUSEHOLE_AUTH_PASSWORD=${config.sops.placeholder."mousehole/password"}
+          '';
+        };
 
         virtualisation.oci-containers.containers.mousehole = {
           image = "tmmrtn/mousehole:latest@sha256:2fc02b12362581e60bfd6adba788bda9eda93f8f31ed089581eeabcee4518b0d";
-          volumes = ["/data/mousehole:/srv/mousehole"];
+
+          # only ever reached through caddy's https vhost
+          environment = {
+            MOUSEHOLE_ALLOWED_HOSTS = domain;
+            MOUSEHOLE_ALLOWED_ORIGINS = "https://${domain}";
+            MOUSEHOLE_HTTPS_ONLY_COOKIES = "true";
+          };
+
+          environmentFiles = [config.sops.templates."mousehole.env".path];
+          volumes = ["/data/mousehole:/var/lib/mousehole"];
         };
 
         systemd.tmpfiles.rules = ["d /data/mousehole 0775 1000 data -"];
