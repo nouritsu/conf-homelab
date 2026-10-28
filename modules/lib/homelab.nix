@@ -38,10 +38,10 @@
         extraOptions = lib.mkAfter ["--network=container:gluetun"];
       };
 
-      # down whenever gluetun is, back once it is healthy again
+      # down whenever gluetun is, back once it is healthy again; not upheldBy, which revives a removed service mid-switch
       systemd.services."podman-${name}" = {
         bindsTo = ["podman-gluetun.service"];
-        upheldBy = ["podman-gluetun.service"];
+        wantedBy = ["podman-gluetun.service"];
       };
     };
   };
