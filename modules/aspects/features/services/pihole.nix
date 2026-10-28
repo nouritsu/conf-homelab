@@ -11,7 +11,7 @@ in {
       inherit port;
     };
 
-    # also the consumer: every non-tunnelled endpoint gets a local A record
+    # also the consumer: every lan endpoint gets a local A record
     nixos = {
       endpoint,
       config,
@@ -25,7 +25,7 @@ in {
 
       local =
         lib.sort (a: b: a.subdomain < b.subdomain)
-        (lib.filter (e: !(e.tunnel or false)) endpoint);
+        (lib.filter (e: !(e.public or false)) endpoint);
     in {
       environment.systemPackages = [pkgs.pihole-ftl];
       # NetworkManager owns end0; it does DHCP itself and forces

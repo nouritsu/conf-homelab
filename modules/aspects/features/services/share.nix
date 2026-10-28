@@ -4,7 +4,7 @@
   in {
     endpoint = {
       subdomain = "share";
-      tunnel = true;
+      public = true;
       inherit port;
     };
 

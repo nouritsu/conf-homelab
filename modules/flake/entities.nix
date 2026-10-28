@@ -7,6 +7,7 @@ in {
   den.hosts.aarch64-linux.homelab = {
     instantiate = rpi;
     users.aneesh = {};
+    tunnels-via = "vps";
   };
 
   # the user has to be declared on this host too: check-all selects the homelab

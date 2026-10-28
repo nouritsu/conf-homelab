@@ -7,7 +7,7 @@ in {
   den.aspects.services.documenso = {
     endpoint = {
       subdomain = "sign";
-      tunnel = true;
+      public = true;
       inherit port;
     };
     backup.paths = ["/var/lib/containers/storage/volumes/documenso-db"];
