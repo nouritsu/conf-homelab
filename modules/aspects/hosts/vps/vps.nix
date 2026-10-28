@@ -25,6 +25,9 @@
       sops.age.keyFile = "/root/sops.txt";
 
       networking.domain = den.lib.homelab.base-domain;
+
+      # broker inhibits a live switch from dbus; move with `deploy vps boot` and a reboot
+      services.dbus.implementation = "dbus";
     };
   };
 }

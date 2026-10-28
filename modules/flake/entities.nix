@@ -17,7 +17,6 @@ in {
   };
 
   den.hosts.x86_64-linux.vps = {
-    instantiate = inputs.nixpkgs-vps.lib.nixosSystem;
     users.aneesh = {};
     deploy.target = "root@nouritsu.com";
   };

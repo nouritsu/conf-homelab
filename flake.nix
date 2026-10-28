@@ -5,13 +5,6 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixos-raspberrypi.url = "github:nvmd/nixos-raspberrypi/main";
 
-    # what the vps last ran from nixos-vps; dropped once its port is deployed
-    nixpkgs-vps.url = "github:NixOS/nixpkgs/6c9a78c09ff4d6c21d0319114873508a6ec01655";
-    headplane = {
-      url = "github:tale/headplane/dfda629b12e50a555886902d9e4bd94753e1993a";
-      inputs.nixpkgs.follows = "nixpkgs-vps";
-    };
-
     # upstream nix-minecraft has no forge servers
     nix-minecraft = {
       url = "github:hustlerone/nix-minecraft";

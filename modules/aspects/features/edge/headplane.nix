@@ -1,4 +1,4 @@
-{inputs, ...}: let
+let
   # off 3000: rathole binds the homelab's documenso there
   port = 3030;
 in {
@@ -28,12 +28,9 @@ in {
         policy.path = "/dev/null";
       });
     in {
-      imports = [inputs.headplane.nixosModules.headplane];
-      nixpkgs.overlays = [inputs.headplane.overlays.default];
-
       sops.secrets."headplane/cookie-secret".owner = "headscale";
-      sops.secrets."headplane/agent-authkey".owner = "headscale";
 
+      # no agent: since 0.7 it needs a headscale api key, which the pre-auth key in agent-authkey is not
       services.headplane = {
         enable = true;
         settings = {
@@ -46,16 +43,7 @@ in {
             url = "http://127.0.0.1:${toString config.services.headscale.port}";
             config_path = "${headscale-config}";
           };
-          integration.agent = {
-            enabled = true;
-            pre_authkey_path = config.sops.secrets."headplane/agent-authkey".path;
-          };
         };
-      };
-
-      systemd.services.headplane = {
-        after = ["headscale.service"];
-        requires = ["headscale.service"];
       };
     };
   };
