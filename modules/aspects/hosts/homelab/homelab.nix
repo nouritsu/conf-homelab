@@ -18,7 +18,7 @@
       services.openrgb
       services.beszel
       services.copyparty
-      services.bookshelf
+      services.bindery
       services.bazarr
       services.scrutiny
       services.paperless
