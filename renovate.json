@@ -35,6 +35,11 @@
         "ghcr.io/immich-app/immich-machine-learning"
       ],
       "groupName": "immich"
+    },
+    {
+      "description": "qbittorrent is held below 5.3.0",
+      "matchPackageNames": ["lscr.io/linuxserver/qbittorrent"],
+      "allowedVersions": "<5.3.0"
     }
   ]
 }
