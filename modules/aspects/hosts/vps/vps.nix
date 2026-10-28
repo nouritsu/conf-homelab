@@ -10,7 +10,6 @@
 
       # services
       edge.www
-      edge.hire-me
       edge.headscale
       edge.headplane
     ];
