@@ -21,7 +21,9 @@ in {
     deploy.target = "root@nouritsu.com";
   };
 
+  # the game server's box is gone; kept so it is evaluated and can be provisioned again
   den.hosts.x86_64-linux.nenya = {
+    active = false;
     users.aneesh = {};
     deploy.target = "root@82.26.94.225";
   };

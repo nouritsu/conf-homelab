@@ -9,6 +9,12 @@
         default = null;
       };
 
+      active = mkOption {
+        description = "Whether the host has a machine; `deploy` and `stale` skip an inactive one, which is still evaluated.";
+        type = types.bool;
+        default = true;
+      };
+
       deploy = mkOption {
         description = "Where `deploy <host>` builds and activates; null for hosts that are never deployed.";
         default = null;

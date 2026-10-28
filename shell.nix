@@ -3,9 +3,12 @@
   lib,
   ...
 }: let
-  deployable =
+  with-deploy =
     lib.filterAttrs (_: h: h.deploy != null)
     (lib.concatMapAttrs (_: hosts: hosts) config.den.hosts);
+
+  deployable = lib.filterAttrs (_: h: h.active) with-deploy;
+  inactive = lib.filterAttrs (_: h: !h.active) with-deploy;
 
   built-here = h: h.deploy.build-host == null;
 
@@ -45,6 +48,10 @@ in {
               ${name}) flags=(${lib.escapeShellArgs (deploy-flags h)}) ;;
             '')
             deployable)}
+          ${lib.concatMapStrings (name: ''
+              ${name}) echo "${name} is inactive: set active = true in modules/flake/entities.nix first" >&2; exit 1 ;;
+            '')
+            (lib.attrNames inactive)}
             *) echo "$usage" >&2; exit 1 ;;
           esac
 
