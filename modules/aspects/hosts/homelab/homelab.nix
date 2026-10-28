@@ -59,6 +59,9 @@
       boot.loader.raspberry-pi.bootloader = "kernel";
       environment.systemPackages = [pkgs.raspberrypi-eeprom];
 
+      # off data's 993, which the pi's first activation had already given spi
+      users.groups.spi.gid = 973;
+
       # the bcm2835 watchdog's maximum; a hung pi resets itself
       systemd.settings.Manager.RuntimeWatchdogSec = "15s";
 
