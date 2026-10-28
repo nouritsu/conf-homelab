@@ -12,6 +12,7 @@
       edge.www
       edge.headscale
       edge.headplane
+      edge.cn-calsync
     ];
 
     nixos = {
