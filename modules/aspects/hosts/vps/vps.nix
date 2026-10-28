@@ -13,6 +13,7 @@
       edge.headscale
       edge.headplane
       edge.cn-calsync
+      edge.birthdays
     ];
 
     nixos = {

@@ -35,6 +35,7 @@
       services.qbittorrent
       services.mousehole
       services.sabnzbd
+      services.radicale
     ];
 
     nixos = {pkgs, ...}: {
