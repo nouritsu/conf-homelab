@@ -13,6 +13,11 @@ in {
     backup.paths = ["/var/lib/containers/storage/volumes/documenso-db"];
 
     nixos = {config, ...}: {
+      sops.secrets."documenso-cert" = {
+        sopsFile = ../secrets/cert.p12.enc;
+        format = "binary";
+        mode = "0644";
+      };
       sops.secrets."sign/nextauth-secret" = {};
       sops.secrets."sign/next-key" = {};
       sops.secrets."sign/next-secondary-key" = {};

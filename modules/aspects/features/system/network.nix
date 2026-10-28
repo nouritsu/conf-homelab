@@ -1,7 +1,8 @@
 {
-  den.aspects.network.nixos = {
-    networking.networkmanager.enable = true;
+  # a rented vm keeps its provider's scripted dhcp
+  den.aspects.network.manager.nixos.networking.networkmanager.enable = true;
 
+  den.aspects.network.nixos = {
     networking.firewall.enable = true;
 
     boot.kernel.sysctl = {

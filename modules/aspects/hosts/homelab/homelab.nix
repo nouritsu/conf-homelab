@@ -7,6 +7,7 @@
     includes = with den.aspects; [
       server
       backup
+      network.manager
 
       # hardware
       graphics
@@ -45,6 +46,13 @@
           display-vc4
           bluetooth
         ];
+
+      # ================================================================ #
+      # =                         DO NOT TOUCH                         = #
+      # ================================================================ #
+      system.stateVersion = "25.11";
+
+      sops.defaultSopsFile = ./secrets.yaml;
 
       networking.domain = den.lib.homelab.base-domain;
 
