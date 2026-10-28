@@ -22,4 +22,11 @@
       boot.kernel.sysctl."net.ipv4.ip_forward" = lib.mkForce 1;
     };
   };
+
+  # the same for games, on x86 where their images run; caddy is for valheim-files
+  den.aspects.check-games.includes = with den.aspects; [
+    nenya
+    caddy
+    games._
+  ];
 }

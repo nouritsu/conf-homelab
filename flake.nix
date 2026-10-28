@@ -1,5 +1,5 @@
 {
-  description = "My servers: the rpi5 homelab and the vps in front of it";
+  description = "My servers: the rpi5 homelab, the vps in front of it, and a game server";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -12,6 +12,11 @@
       inputs.nixpkgs.follows = "nixpkgs-vps";
     };
 
+    # upstream nix-minecraft has no forge servers
+    nix-minecraft = {
+      url = "github:hustlerone/nix-minecraft";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     flake-parts.url = "github:hercules-ci/flake-parts";
     import-tree.url = "github:vic/import-tree";
     den.url = "github:denful/den";

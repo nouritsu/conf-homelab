@@ -15,10 +15,18 @@ in {
     users.aneesh = {};
   };
 
+  den.hosts.x86_64-linux.nenya = {
+    users.aneesh = {};
+  };
+
   # the user has to be declared on this host too: check-all selects the homelab
   # aspect, not the homelab entity, so it does not inherit its users
   den.hosts.aarch64-linux.check-all = {
     instantiate = rpi;
+    users.aneesh = {};
+  };
+
+  den.hosts.x86_64-linux.check-games = {
     users.aneesh = {};
   };
 }
