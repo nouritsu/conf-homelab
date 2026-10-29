@@ -203,6 +203,8 @@ in {
         };
       };
       systemd.services.syncthing.serviceConfig.SupplementaryGroups = ["paperless" "users" "data"];
+      # mergerfs takes the caller's groups from /etc/group, not the unit's SupplementaryGroups
+      users.users.${cfg.user}.extraGroups = ["data"];
 
       systemd.tmpfiles.rules = ["d /data/sync 0750 ${cfg.user} ${cfg.group} -"];
 
