@@ -30,7 +30,7 @@ in {
     in {
       sops.secrets."headplane/cookie-secret".owner = "headscale";
 
-      # no agent: since 0.7 it needs a headscale api key, which the pre-auth key in agent-authkey is not
+      # no agent: since 0.7 it needs a headscale api key, not a pre-auth key
       services.headplane = {
         enable = true;
         settings = {
