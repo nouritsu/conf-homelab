@@ -4,9 +4,11 @@
 # pool and build their own config from it.
 {
   den.quirks.endpoint.description = ''
-    A service reachable through caddy. { subdomain | domain, port ?, extraConfig ?, public ? false } -
+    A service reachable through caddy. { subdomain | domain, port ?, extraConfig ?, public ? false, vhost ? true } -
     public is for the internet, else the lan only. A host with tunnels-via
     sends its public endpoints through the tunnel; any other serves them itself.
+    vhost = false tunnels a public port without a site of its own, for
+    another vhost on the tunnel's server to proxy to.
   '';
 
   den.quirks.tunnel.description = ''

@@ -1,12 +1,15 @@
-"""Turn the birthdays, anniversaries and other dates in Radicale's address books into one ICS feed on stdout."""
+"""Turn the birthdays, anniversaries and other dates in Radicale's address books into one ICS feed."""
 
 import argparse
 import datetime as dt
 import hashlib
 import json
 import logging
+import os
 import re
+import shutil
 import sys
+import tempfile
 from pathlib import Path
 
 import icalendar
@@ -200,13 +203,53 @@ def render(events):
     return cal.to_ical()
 
 
+def write_atomic(path, data, mode):
+    fd, tmp = tempfile.mkstemp(dir=path.parent, prefix=f".{path.name}.")
+    try:
+        with os.fdopen(fd, "wb") as f:
+            f.write(data)
+        os.chmod(tmp, mode)
+        os.replace(tmp, path)
+    except BaseException:
+        os.unlink(tmp)
+        raise
+
+
+def credential(name):
+    directory = os.environ.get("CREDENTIALS_DIRECTORY")
+    if not directory or not (Path(directory) / name).is_file():
+        raise FeedError(f"no credential {name} (systemd LoadCredential)")
+    return (Path(directory) / name).read_text().strip()
+
+
+def publish(root, token, data):
+    # 0711: caddy can open the token's path, nobody can list it
+    target = root / token
+    target.mkdir(parents=True, exist_ok=True)
+    os.chmod(root, 0o711)
+    os.chmod(target, 0o711)
+    write_atomic(target / "birthdays.ics", data, 0o644)
+    for stale in root.iterdir():
+        if stale.is_dir() and stale != target:
+            shutil.rmtree(stale)
+            log.info("removed the feed of an old token")
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("collections", type=Path, help="radicale's storage folder, e.g. /var/lib/radicale/collections")
+    parser.add_argument("--feeds", type=Path, help="publish to FEEDS/<feed-token>/birthdays.ics instead of stdout")
     args = parser.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
     try:
-        sys.stdout.buffer.write(render(collect(args.collections)))
+        data = render(collect(args.collections))
+        if not args.feeds:
+            sys.stdout.buffer.write(data)
+            return
+        token = credential("feed-token")
+        if not re.fullmatch(r"[A-Za-z0-9_-]{16,}", token):
+            raise FeedError("the feed token must be at least 16 characters of [A-Za-z0-9_-]")
+        publish(args.feeds, token, data)
     except FeedError as e:
         log.error("%s", e)
         sys.exit(1)

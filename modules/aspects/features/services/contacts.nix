@@ -1,15 +1,24 @@
-{den, ...}: let
-  inherit (den.lib.homelab) base-domain;
-
+let
   # radicale's own default; left unset so the module keeps it on localhost
   port = 5232;
+  feed-port = 8089;
   collections = "/var/lib/radicale/collections";
+  state-dir = "/var/lib/birthdays";
 in {
   den.aspects.services.radicale = {
-    endpoint = {
-      subdomain = "contacts";
-      inherit port;
-    };
+    endpoint = [
+      {
+        subdomain = "contacts";
+        inherit port;
+      }
+      # only a tunnel: edge.birthdays proxies cal.nouritsu.com's feed path to it
+      {
+        subdomain = "birthdays";
+        port = feed-port;
+        public = true;
+        vhost = false;
+      }
+    ];
     backup.paths = [collections];
 
     nixos = {
@@ -24,7 +33,7 @@ in {
       } (builtins.readFile ./birthdays.py);
     in {
       sops.secrets."radicale/htpasswd".owner = "radicale";
-      sops.secrets."birthdays/ssh-key" = {};
+      sops.secrets."birthdays/feed-token" = {};
 
       services.radicale = {
         enable = true;
@@ -35,33 +44,37 @@ in {
         };
       };
 
-      programs.ssh.knownHosts.${base-domain}.publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGfueKWTRGtY20+RWrRPJHPvo1CmKOd0T/YJ9nbOXk4Q";
+      # static rather than DynamicUser: caddy can't reach /var/lib/private
+      users.users.birthdays = {
+        isSystemUser = true;
+        group = "birthdays";
+      };
+      users.groups.birthdays = {};
 
-      # the contacts' dates, for edge.birthdays on the vps to serve
+      # the contacts' dates as an ics feed, regenerated hourly
       systemd.services.birthdays = {
-        description = "Push the contacts' birthdays to the vps";
-        wants = ["network-online.target"];
-        after = ["network-online.target" "radicale.service"];
-        path = [pkgs.openssh];
-
-        script = ''
-          set -o pipefail
-          ${lib.getExe birthdays} ${collections} \
-            | ssh -T -i "$CREDENTIALS_DIRECTORY/ssh-key" -o IdentitiesOnly=yes -o BatchMode=yes \
-              -o ConnectTimeout=10 -o UserKnownHostsFile=/dev/null birthdays@${base-domain}
-        '';
+        description = "Publish the contacts' birthdays as an ics feed";
+        after = ["radicale.service"];
 
         serviceConfig = {
           Type = "oneshot";
-          DynamicUser = true;
+          ExecStart = "${lib.getExe birthdays} ${collections} --feeds ${state-dir}/feeds";
+          User = "birthdays";
+          Group = "birthdays";
           # radicale's storage is group-readable
           SupplementaryGroups = ["radicale"];
-          LoadCredential = ["ssh-key:${config.sops.secrets."birthdays/ssh-key".path}"];
+          LoadCredential = ["feed-token:${config.sops.secrets."birthdays/feed-token".path}"];
 
+          # 0711: caddy can open the token's path, nobody can list it
+          StateDirectory = "birthdays";
+          StateDirectoryMode = "0711";
+
+          ProtectSystem = "strict";
+          ProtectHome = true;
           PrivateTmp = true;
           PrivateDevices = true;
+          PrivateNetwork = true;
           NoNewPrivileges = true;
-          RestrictAddressFamilies = ["AF_INET" "AF_INET6" "AF_UNIX"];
         };
       };
 
@@ -71,6 +84,15 @@ in {
           OnCalendar = "hourly";
           Persistent = true;
         };
+      };
+
+      # the tunnel's end; the secret token is a directory name, so it never appears here
+      services.caddy.virtualHosts."http://:${toString feed-port}" = {
+        listenAddresses = ["127.0.0.1"];
+        extraConfig = ''
+          root * ${state-dir}/feeds
+          file_server
+        '';
       };
     };
   };

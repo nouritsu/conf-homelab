@@ -17,12 +17,14 @@
 
       # a host behind a tunnel leaves its public endpoints to the tunnel's server
       tunnelled = host.tunnels-via != null;
-      vhosts = lib.filter (e: !(tunnelled && public e)) endpoint ++ tunnel;
+      # a vhost-less endpoint is only a tunnel, for another vhost to proxy to
+      vhosts = lib.filter (e: e.vhost or true) (lib.filter (e: !(tunnelled && public e)) endpoint ++ tunnel);
 
-      known = ["subdomain" "domain" "port" "extraConfig" "public"];
+      known = ["subdomain" "domain" "port" "extraConfig" "public" "vhost"];
       problems = e:
         map (k: "unknown key ${k}") (lib.subtractLists known (lib.attrNames e))
-        ++ lib.optional ((e ? subdomain) == (e ? domain)) "needs exactly one of subdomain or domain";
+        ++ lib.optional ((e ? subdomain) == (e ? domain)) "needs exactly one of subdomain or domain"
+        ++ lib.optional (!(e.vhost or true) && !(public e)) "vhost = false only means something for a public endpoint";
       malformed = lib.filter (e: problems e != []) endpoint;
     in {
       services.caddy.enable = true;
