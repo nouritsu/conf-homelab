@@ -218,6 +218,9 @@ class CampusNet:
     def request(self, method, url, what, **kwargs):
         started = time.monotonic()
         r = self.http.request(method, url, timeout=(15, 90), **kwargs)
+        # campusnet serves utf-8 without a charset, which requests reads as latin-1
+        if "charset" not in r.headers.get("Content-Type", "").lower():
+            r.encoding = "utf-8"
         self.last = r.text
         log.info("fetched %s (%d, %.1fs)", what, r.status_code, time.monotonic() - started)
         r.raise_for_status()
@@ -350,7 +353,8 @@ def category(course_type, code):
 
 
 def class_summary(title, course_type, code, cat):
-    word = course_type or {"lectures": "Lecture", "tutorials": "Tutorial"}.get(cat, "")
+    # "Online Lecture" and "Lecture/Lab" read as Lecture; the description keeps the full type
+    word = {"lectures": "Lecture", "tutorials": "Tutorial"}.get(cat, course_type)
     if not word:
         return f"{title} ({base_code(code)})"
     name = re.sub(rf"\s+{re.escape(word)}s?$", "", title, flags=re.IGNORECASE)
