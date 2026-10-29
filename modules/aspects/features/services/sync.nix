@@ -75,6 +75,14 @@ let
       devices = ["pixel"];
       versioned = false;
     };
+    # bindery's library, the one folder the hub sends
+    library = {
+      path = "/media/media/books";
+      type = "sendonly";
+      devices = ["pc" "laptop" "pixel"];
+      ignores = base-ignores;
+      versioned = false;
+    };
   };
 in {
   den.aspects.services.syncthing = {
@@ -82,9 +90,11 @@ in {
       subdomain = "sync";
       inherit port;
     };
-    # the folders too: a deletion syncs everywhere, a snapshot keeps it
+    # the receive-only folders too: a deletion syncs everywhere, a snapshot keeps it
     backup = {config, ...}: {
-      paths = [config.services.syncthing.dataDir] ++ map (f: f.path) (builtins.attrValues folders);
+      paths =
+        [config.services.syncthing.dataDir]
+        ++ map (f: f.path) (builtins.filter (f: (f.type or "receiveonly") == "receiveonly") (builtins.attrValues folders));
     };
 
     nixos = {
@@ -101,7 +111,7 @@ in {
           id = name;
           label = name;
           inherit (f) path;
-          type = "receiveonly";
+          type = f.type or "receiveonly";
           devices = map (d: {deviceID = id d;}) (["homelab"] ++ f.devices);
         }
         // lib.optionalAttrs (f.versioned or true) {
