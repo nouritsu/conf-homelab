@@ -60,7 +60,7 @@ let
     # a mirror, not an archive: google photos keeps the originals
     phone-camera = {
       path = "/data/sync/phone-camera";
-      devices = ["pixel"];
+      devices = ["pixel" "pc" "laptop"];
       ignores = phone-ignores;
     };
     # seedvault keeps its own generations
