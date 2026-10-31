@@ -13,7 +13,6 @@
     ssh
     ssh.from-pc
     ssh.from-laptop
-    ssh.from-pixel
     ssh.from-yubikeys
 
     apps.core
