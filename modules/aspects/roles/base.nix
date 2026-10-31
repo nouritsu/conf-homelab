@@ -14,6 +14,7 @@
     ssh.from-pc
     ssh.from-laptop
     ssh.from-yubikeys
+    motd
 
     apps.core
     apps.helix
