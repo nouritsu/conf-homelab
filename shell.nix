@@ -65,7 +65,8 @@ in {
             local host=$1 target=$2 ifd=$3 want have
             want=$(nix eval --raw ".#nixosConfigurations.$host.config.system.build.toplevel.outPath" \
               --option allow-import-from-derivation "$ifd" 2>/dev/null) || { echo "$host: does not evaluate"; return; }
-            have=$(ssh -o BatchMode=yes -o ConnectTimeout=5 "$target" readlink /run/current-system 2>/dev/null) \
+            # as the user, as root would take a touch per host
+            have=$(ssh -o BatchMode=yes -o ConnectTimeout=5 "''${target#root@}" readlink /run/current-system 2>/dev/null) \
               || { echo "$host: unreachable"; return; }
             if [ "$want" = "$have" ]; then echo "$host: up to date"; else echo "$host: stale, run deploy $host"; fi
           }
